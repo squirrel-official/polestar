@@ -2,7 +2,8 @@ python -m venv polestar-env
 
 source polestar-env/bin/activate
 
-pip install numpy
+sudo apt-get install libcap-dev
+sudo apt-get install gfortran
 pip install -r requirements.txt
 
-sudo apt-get install gfortran
+
