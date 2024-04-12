@@ -1,3 +1,5 @@
+use ubuntu 32 bit only
+
 python -m venv polestar-env
 
 source polestar-env/bin/activate
