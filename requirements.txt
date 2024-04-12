@@ -1,5 +1,5 @@
 numpy
 insightface
 picamera2
-opencv-python
+opencv-python-headless
 
