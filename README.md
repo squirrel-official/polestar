@@ -14,6 +14,8 @@ sudo apt-get install gfortran
 
 pip3 install --upgrade pip
 
+pip cache purge
+
 pip install -r requirements.txt --verbose
 
 
