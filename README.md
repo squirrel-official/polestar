@@ -12,6 +12,8 @@ sudo apt-get install libopenblas-dev
 
 sudo apt-get install gfortran
 
-pip install -r requirements.txt
+pip3 install --upgrade pip
+
+pip install -r requirements.txt --verbose
 
 
