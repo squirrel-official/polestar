@@ -1,6 +1,6 @@
+from deepface import DeepFace
 import time
 import glob
-from face_recognition import load_image_file, face_encodings
 from customLogging.customLogging import get_logger
 
 count = 0
@@ -16,15 +16,16 @@ def load_criminal_images():
     criminal_cache = []
     start_date_time = time.time()
     for eachWantedCriminalPath in glob.glob(WANTED_CRIMINALS_PATH):
-        criminal_image = load_image_file(eachWantedCriminalPath)
         try:
-            criminal_image_encoding = face_encodings(criminal_image)[0]
-            criminal_cache.append(criminal_image_encoding)
-        except IndexError as e:
-            logger.error("An exception occurred while reading {0}".format(eachWantedCriminalPath))
+            results = DeepFace.detectFace(eachWantedCriminalPath)
+            if len(results) > 0:
+                criminal_image_encoding = DeepFace.represent(eachWantedCriminalPath, model_name='ArcFace')
+                criminal_cache.append(criminal_image_encoding)
+        except Exception as e:
+            logger.error("An exception occurred while reading {0}: {1}".format(eachWantedCriminalPath, str(e)))
     # Once the loading is done then print
     logger.info(
-        "Loaded criminal  {0} images in {1} seconds".format(len(criminal_cache), (time.time() - start_date_time)))
+        "Loaded {0} criminal images in {1} seconds".format(len(criminal_cache), (time.time() - start_date_time)))
     return criminal_cache
 
 
@@ -32,13 +33,14 @@ def load_known_images():
     known_person_cache = []
     start_date_time = time.time()
     for eachWantedKnownPersonPath in glob.glob(FAMILIAR_FACES_PATH):
-        known_person_image = load_image_file(eachWantedKnownPersonPath)
         try:
-            known_person_image_encoding = face_encodings(known_person_image)[0]
-            known_person_cache.append(known_person_image_encoding)
-        except IndexError as e:
-            logger.error("An exception occurred while reading {0}".format(eachWantedKnownPersonPath))
+            results = DeepFace.detectFace(eachWantedKnownPersonPath)
+            if len(results) > 0:
+                known_person_image_encoding = DeepFace.represent(eachWantedKnownPersonPath, model_name='ArcFace')
+                known_person_cache.append(known_person_image_encoding)
+        except Exception as e:
+            logger.error("An exception occurred while reading {0}: {1}".format(eachWantedKnownPersonPath, str(e)))
     # Once the loading is done then print
     logger.info(
-        "Loaded known  {0} images in {1} seconds".format(len(known_person_cache), (time.time() - start_date_time)))
+        "Loaded {0} known images in {1} seconds".format(len(known_person_cache), (time.time() - start_date_time)))
     return known_person_cache
