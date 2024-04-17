@@ -40,5 +40,7 @@ sudo apt install pkg-config libhdf5-dev
 
 pip3 install deepface  --break-system-packages
 
+pip3 install tf-keras --break-system-packages
+
 
 sudo chmod -R 777 .
