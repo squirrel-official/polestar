@@ -3,8 +3,7 @@ import time
 from customLogging.customLogging import get_logger
 from PIL import Image
 import cv2
-import face_recognition
-from face_recognition import load_image_file, face_encodings
+from deepface import DeepFace
 import requests
 
 logger = get_logger("FaceComparisonUtil")
@@ -50,80 +49,84 @@ def analyze_face(image, count_index, criminal_cache, known_person_cache):
         count_index += 1
 
 
-def extract_face(image):
-    face_locations = face_recognition.face_locations(image)
-    for face_location in face_locations:
-        # Print the location of each face in this image
-        top, right, bottom, left = face_location
-        # print("A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}".format(top, left, bottom,
-        #                                                                                             right))
-        # You can access the actual face itself like this:
-        face_image = image[top:bottom, left:right]
-        # pil_image = Image.fromarray(face_image)
+def extract_face(image_path):
+    detected_faces = DeepFace.detectFace(image_path, enforce_detection=True)
+    if len(detected_faces) == 0:
+        return None
+    else:
+        # Assume only one face is detected
+        face_image = detected_faces[0]["image"]
         return face_image
 
 
 def compare_faces(known_image_encoding, unknown_image_encoding, each_wanted_criminal_path):
-    unknown_face_locations = face_recognition.face_locations(unknown_image_encoding)
+    # Detect faces in the unknown image
+    unknown_faces = DeepFace.detectFace(unknown_image_encoding, enforce_detection=True)
 
-    for face_location in unknown_face_locations:
-        top, right, bottom, left = face_location
-        unknown_face_image = unknown_image_encoding[top:bottom, left:right]
-        for each_unknown_face_encoding in face_recognition.face_encodings(unknown_face_image):
-            face_compare_list = face_recognition.compare_faces([each_unknown_face_encoding], known_image_encoding, 0.5)
-            # show the image if it  has matched
-            for face_compare in face_compare_list:
-                if face_compare:
-                    print("face comparison match with %s" % each_wanted_criminal_path)
-                    return True
+    # If no faces are detected in the unknown image, return False
+    if unknown_faces is None:
+        return False
+
+    # Iterate through each detected face in the unknown image
+    for unknown_face in unknown_faces:
+        # Verify if the detected face matches the known face
+        result = DeepFace.verify(known_image_encoding, unknown_face)
+        # If the faces match, print a message and return True
+        if result["verified"]:
+            print(f"Face comparison match with {each_wanted_criminal_path}")
+            return True
+
+    # If no matching faces are found, return False
+    return False
 
 
 def extract_unknown_face_encodings(unknown_image):
-    unknown_face_locations = face_recognition.face_locations(unknown_image)
+    # Detect faces in the unknown image
+    unknown_faces = DeepFace.detectFace(unknown_image, enforce_detection=True)
+
+    # Initialize a list to store unknown face encodings
     unknown_face_encoding_list = []
-    for face_location in unknown_face_locations:
-        top, right, bottom, left = face_location
-        unknown_face_image = unknown_image[top:bottom, left:right]
-        for each_unknown_face_encoding in face_recognition.face_encodings(unknown_face_image):
-            unknown_face_encoding_list.append(each_unknown_face_encoding)
-    # Returning unknown face encodings
+
+    # Iterate through each detected face in the unknown image
+    for unknown_face in unknown_faces:
+        # Calculate the encoding for the detected face
+        unknown_face_encoding = DeepFace.represent(unknown_face, enforce_detection=True)
+        # Append the encoding to the list
+        unknown_face_encoding_list.append(unknown_face_encoding)
+
+    # Return the list of unknown face encodings
     return unknown_face_encoding_list
 
 
 def compare_faces_with_encodings(known_image_encoding, unknown_image_encoding_list, each_wanted_criminal_path):
+    # Iterate through each unknown face encoding
     for each_unknown_face_encoding in unknown_image_encoding_list:
-        face_compare_list = face_recognition.compare_faces([each_unknown_face_encoding], known_image_encoding, 0.5)
-        # show the image if it  has matched
-        for face_compare in face_compare_list:
-            if face_compare:
-                print("face comparison match with %s" % each_wanted_criminal_path)
-                return True
+        # Compare the unknown face encoding with the known face encoding
+        result = DeepFace.verify(known_image_encoding, each_unknown_face_encoding)
+        # If the faces match, print a message and return True
+        if result["verified"]:
+            print(f"Face comparison match with {each_wanted_criminal_path}")
+            return True
+
+    # If no matching faces are found, return False
+    return False
 
 
 def compare_faces_with_path(known_image_path, unknown_image_path):
-    # known_image = face_recognition.load_image_file("/Users/anil/Desktop/saurabh.jpeg")
-    known_image = load_image_file(known_image_path)
-    known_image_encoding = face_encodings(known_image)[0]
+    # Load known image and encode the face
+    known_face = DeepFace.detectFace(known_image_path, enforce_detection=True)
+    known_encoding = DeepFace.represent(known_face, enforce_detection=True)
 
-    # image = face_recognition.load_image_file("/Users/anil/Desktop/test1.png")
-    unknown_image = load_image_file(unknown_image_path)
-    unknown_face_locations = face_recognition.face_locations(unknown_image)
+    # Load unknown image and detect faces
+    unknown_faces = DeepFace.detectFace(unknown_image_path, enforce_detection=True)
 
-    for face_location in unknown_face_locations:
+    # Iterate through each detected face in the unknown image
+    for unknown_face in unknown_faces:
+        # Compare the unknown face with the known face
+        result = DeepFace.verify(known_encoding, unknown_face)
+        # If the faces match, return True
+        if result["verified"]:
+            return True
 
-        # Print the location of each face in this image
-        top, right, bottom, left = face_location
-        logger.debug(
-            "A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}".format(top, left, bottom,
-                                                                                                  right))
-
-        # You can access the actual face itself like this:
-        unknown_face_image = unknown_image[top:bottom, left:right]
-        pil_image = Image.fromarray(unknown_face_image)
-        unknown_encoding = face_recognition.face_encodings(unknown_face_image)[0]
-        face_compare_list = face_recognition.compare_faces([unknown_encoding], known_image_encoding)
-        # show the image if it  has matched
-        for face_compare in face_compare_list:
-            if face_compare:
-                # pil_image.show()
-                return True
+    # If no matching faces are found, return False
+    return False
