@@ -29,13 +29,17 @@ notification_queue = Queue()
 
 def monitor_camera_stream(criminal_cache, known_person_cache):
     try:
-        camera = Picamera2()
-        # Configure camera resolution and format (adjust as needed)
-        camera.resolution = (1080, 720)
-        camera.preview_format = camera.PIXEL_FORMAT_YUV420
+        camera_resolution = (1080, 720)
 
-        # Start recording (captures a continuous stream)
-        camera.start_recording(frame_queue, format='yuv')
+        # Create a Picamera2 instance
+        camera = Picamera2()
+
+        # Configure the preview stream
+        config = camera.create_preview_configuration(camera_resolution)
+        camera.configure(config)
+
+        # Start the camera stream
+        camera.start()
 
         frame_count = 1
         image_count = 1
@@ -57,6 +61,8 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
     except Exception as e:
         logger.error("An exception occurred in capture thread.")
         logger.error(e, exc_info=True)
+        camera.stop()
+        camera.close()
 
 
 def process_frame(image, criminal_cache, known_person_cache):
