@@ -34,11 +34,11 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
         # Create a Picamera2 instance
         camera = Picamera2()
 
-        # Configure the preview stream
-        config = camera.create_preview_configuration(camera_resolution)
+        # Configure the still capture stream (no preview)
+        config = camera.create_still_configuration(camera_resolution)
         camera.configure(config)
 
-        # Start the camera stream
+        # Start the camera stream (without preview)
         camera.start()
 
         frame_count = 1
