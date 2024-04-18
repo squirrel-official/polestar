@@ -29,13 +29,11 @@ notification_queue = Queue()
 
 def monitor_camera_stream(criminal_cache, known_person_cache):
     try:
-        camera_resolution = (1080, 720)
-
         # Create a Picamera2 instance
         camera = Picamera2()
 
         # Configure the still capture stream (no preview)
-        config = camera.create_still_configuration(camera_resolution)
+        config = camera.create_video_configuration(main={"size": (1024, 768)})
         camera.configure(config)
 
         # Start the camera stream (without preview)
@@ -48,7 +46,7 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
 
         while True:
             # Get a frame and metadata from the camera
-            frame, metadata = camera.wait_request()
+            frame = camera.capture_array()
 
             # Convert YUV frame to RGB for processing
             frame = frame[..., ::-1]
