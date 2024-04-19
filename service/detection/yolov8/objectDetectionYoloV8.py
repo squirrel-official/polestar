@@ -19,6 +19,21 @@ def detect_objects(image):
     print('anil3')
     print(results[0].pandas())
     print('anil4')
+
+    for result in results:
+        boxes = result.boxes  # Boxes object for bounding box outputs
+        masks = result.masks  # Masks object for segmentation masks outputs
+        keypoints = result.keypoints  # Keypoints object for pose outputs
+        probs = result.probs  # Probs object for classification outputs
+        print('boxes')
+        print(boxes)
+        print('masks')
+        print(masks)
+        print('keypoints')
+        print(keypoints)
+        print('probs')
+        print(probs)
+
     objects_df = results[0].pandas().xyxy[0]
     if objects_df.shape[0] > 0:  # Check if any objects were detected
         print('Objects detected:')
