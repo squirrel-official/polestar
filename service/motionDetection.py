@@ -50,7 +50,7 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
             # Convert YUV frame to RGB for processing
             frame = frame[..., ::-1]
             # Process the frame in a separate thread (non-blocking)
-            process_frame(frame, criminal_cache, known_person_cache)
+            process_frame(frame, criminal_cache, known_person_cache, detection_counter)
             # process_frame_thread = Thread(target=process_frame,
             #                               args=(frame, criminal_cache, known_person_cache))
             # process_frame_thread.start()
@@ -62,7 +62,7 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
         camera.close()
 
 
-def process_frame(image, criminal_cache, known_person_cache):
+def process_frame(image, criminal_cache, known_person_cache, detection_counter):
     object_detection_flag = 0
     print('processing frame')
     if detect_objects(image):
