@@ -5,7 +5,7 @@ import requests
 from picamera2 import Picamera2
 from queue import Queue
 from customLogging.customLogging import get_logger
-from detection.tensorflow.tf_coco_ssd_algorithm import tensor_coco_ssd_mobilenet
+from detection.yolov8.objectDetectionYoloV8 import detect_objects
 from faceService import analyze_face
 from imageLoadService import load_criminal_images, load_known_images
 from threading import Thread
@@ -64,7 +64,7 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
 
 def process_frame(image, criminal_cache, known_person_cache):
     object_detection_flag = 0
-    if tensor_coco_ssd_mobilenet(image):
+    if detect_objects(image):
         logger.debug("Object detected, flag :{0}".format(object_detection_flag))
         if object_detection_flag == 0:
             detection_counter = time.time()
