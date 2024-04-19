@@ -7,7 +7,7 @@ model = YOLO('yolov8n.pt')  # You can choose other models like 'yolov8s.pt', 'yo
 
 def detect_objects(image):
     results = model(image)
-    objects_df = results.pandas().xyxy[0]
+    objects_df = results[0].pandas().xyxy[0]
     if objects_df.shape[0] > 0:  # Check if any objects were detected
         print('Objects detected:')
         print(objects_df)
