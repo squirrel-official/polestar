@@ -32,7 +32,7 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
         camera = Picamera2()
 
         # Configure the still capture stream (no preview)
-        config = camera.create_video_configuration(main={"size": (1024, 768)})
+        config = camera.create_still_configuration(main={"size": (1024, 768)})
         camera.configure(config)
 
         # Start the camera stream (without preview)
