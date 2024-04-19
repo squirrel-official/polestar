@@ -49,7 +49,6 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
 
             # Convert YUV frame to RGB for processing
             frame = frame[..., ::-1]
-            print(frame)
             # Process the frame in a separate thread (non-blocking)
             process_frame(frame, criminal_cache, known_person_cache)
             # process_frame_thread = Thread(target=process_frame,
