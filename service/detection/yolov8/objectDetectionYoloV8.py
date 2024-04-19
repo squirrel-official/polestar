@@ -6,6 +6,9 @@ model = YOLO('yolov8n.pt')  # You can choose other models like 'yolov8s.pt', 'yo
 
 
 def detect_objects(image):
+    prediction = model.predict(image)
+    print(prediction)
+    print(type(prediction))
     results = model(image)
     print('anil1')
     print(results)
