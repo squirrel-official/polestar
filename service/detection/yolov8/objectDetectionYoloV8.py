@@ -14,11 +14,11 @@ def detect_objects(image):
     results = model(image, stream=True)
     print('anil1')
     print(results)
-    print('anil2')
-    print(results[0])
-    print('anil3')
-    print(results[0].pandas())
-    print('anil4')
+    # print('anil2')
+    # print(results[0])
+    # print('anil3')
+    # print(results[0].pandas())
+    # print('anil4')
 
     for result in results:
         boxes = result.boxes  # Boxes object for bounding box outputs
