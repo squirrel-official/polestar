@@ -25,25 +25,11 @@ def detect_objects(image):
         masks = result.masks  # Masks object for segmentation masks outputs
         keypoints = result.keypoints  # Keypoints object for pose outputs
         probs = result.probs  # Probs object for classification outputs
-        print('boxes')
+        print('Anil-boxes')
         print(boxes)
-        print('masks')
+        print('Anil-masks')
         print(masks)
-        print('keypoints')
+        print('Anil-keypoints')
         print(keypoints)
-        print('probs')
+        print('Anil-probs')
         print(probs)
-
-    # objects_df = results[0].pandas().xyxy[0]
-    # if objects_df.shape[0] > 0:  # Check if any objects were detected
-    #     print('Objects detected:')
-    #     print(objects_df)
-    #     for x_min, y_min, x_max, y_max, conf, name in objects_df.values:
-    #         cv2.rectangle(image, (int(x_min), int(y_min)), (int(x_max), int(y_max)), (0, 255, 0), 2)
-    #         cv2.putText(image, f"{name} ({conf:.2f})", (int(x_min), int(y_min) - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.9,
-    #                     (0, 255, 0), 2)
-    #     return True
-    # else:
-    #     print('No objects detected.')
-    #     return False
-
