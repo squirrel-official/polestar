@@ -64,6 +64,7 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
 
 def process_frame(image, criminal_cache, known_person_cache):
     object_detection_flag = 0
+    print('processing frame')
     if detect_objects(image):
         logger.debug("Object detected, flag :{0}".format(object_detection_flag))
         if object_detection_flag == 0:
