@@ -42,5 +42,5 @@ pip3 install deepface  --break-system-packages
 
 pip3 install tf-keras --break-system-packages
 
-
+pip3 install ultralytics
 sudo chmod -R 777 .
