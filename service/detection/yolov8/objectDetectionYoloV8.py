@@ -9,15 +9,16 @@ def detect_objects(image):
     results = model(image, stream=True)
     print('anil1')
     print(results)
+    print(type(results))
 
     for result in results:
         boxes = result.boxes  # Boxes object for bounding box outputs
         masks = result.masks  # Masks object for segmentation masks outputs
         keypoints = result.keypoints  # Keypoints object for pose outputs
         probs = result.probs  # Probs object for classification outputs
-        print('Anil-boxes')
-        print(boxes)
-        print('Anil-masks')
+        # print('Anil-boxes')
+        # print(boxes)
+        # print('Anil-masks')
         print(masks)
         print('Anil-keypoints')
         print(keypoints)
