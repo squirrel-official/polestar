@@ -24,7 +24,10 @@ def detect_objects(image):
             if confidence > 50:
                 print(class_type)
                 print(confidence)
-                cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
+                print(type(x_min))
+                print(type(x_max))
+                image_bgr = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+                cv2.rectangle(image_bgr, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
                 found = True
 
     return found
