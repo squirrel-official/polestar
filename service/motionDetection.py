@@ -63,22 +63,10 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
 
 
 def process_frame(image, criminal_cache, known_person_cache, detection_counter):
-    object_detection_flag = 0
+    detection_time = time.time()
     print('processing frame')
-    if detect_objects(image):
-        logger.debug("Object detected, flag :{0}".format(object_detection_flag))
-        if object_detection_flag == 0:
-            detection_counter = time.time()
-            object_detection_flag = 1
-        complete_file_name = UNKNOWN_VISITORS_PATH + str(detection_counter) + '.jpg'
-        print(complete_file_name)
-        cv2.imwrite(complete_file_name, image)
+    if detect_objects(image,detection_time, UNKNOWN_VISITORS_PATH):
         facial_comparison_checks(image, criminal_cache, known_person_cache)
-
-    if (time.time() - detection_counter) > 3 and object_detection_flag == 1:
-        object_detection_flag = 0
-        # Send notification (non-blocking)
-        send_notification(NOTIFICATION_URL)
 
 
 def send_notification(notification_url):
