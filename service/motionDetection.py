@@ -15,7 +15,7 @@ ssd_model_path = '/usr/local/polestar/model/coco-ssd-mobilenet'
 efficientdet_lite0_path = '/usr/local/polestar/model/efficientdet-lite0/efficientdet_lite0.tflite'
 
 # For writing
-UNKNOWN_VISITORS_PATH = '/usr/local/polestar/result/unknown-visitors/'
+UNKNOWN_VISITORS_PATH = '/usr/local/polestar/detections/unknown-visitors/'
 
 NOTIFICATION_URL = 'http://my-security.local:8087/visitor'
 count = 0
