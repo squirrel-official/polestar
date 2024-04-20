@@ -26,7 +26,7 @@ FRIEND_NOTIFICATION_URL = 'http://my-security.local:8087/friend'
 
 
 def analyze_face(image, count_index, criminal_cache, known_person_cache):
-    unknown_face_image = extract_face(image)
+    unknown_face_image = extract_face(image, enforce_detection=False)
     if unknown_face_image is not None:
         logger.debug('A new person identified by face so processing it')
         unknown_face_image_encodings = extract_unknown_face_encodings(unknown_face_image)
