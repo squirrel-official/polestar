@@ -26,37 +26,33 @@ FRIEND_NOTIFICATION_URL = 'http://my-security.local:8087/friend'
 
 
 def analyze_face(image, count_index, criminal_cache, known_person_cache):
-    unknown_face_image = extract_face(image)
-    if unknown_face_image is not None:
+    unknown_faces = extract_face(image)
+    if unknown_faces is not None:
         logger.debug('A new person identified by face so processing it')
-        unknown_face_image_encodings = extract_unknown_face_encodings(unknown_face_image)
-        # saving the image to visitor folder
-        start_date_time = time.time()
-        for each_criminal_encoding in criminal_cache:
-            if compare_faces_with_encodings(each_criminal_encoding, unknown_face_image_encodings,
-                                            "eachWantedCriminalPath"):
-                cv2.imwrite('{}criminal-frame{:d}.jpg'.format(CAPTURED_CRIMINALS_PATH, count_index),
-                            unknown_face_image)
-                requests.post(CRIMINAL_NOTIFICATION_URL)
-
-        for each_known_encoding in known_person_cache:
-            if compare_faces_with_encodings(each_known_encoding, unknown_face_image_encodings,
-                                            "eachWantedKnownPath"):
-                cv2.imwrite('{}known-frame{:d}.jpg'.format(KNOWN_VISITORS_PATH, count_index),
-                            unknown_face_image)
-                requests.post(FRIEND_NOTIFICATION_URL)
-        logger.debug("Total comparison time is {0} seconds".format((time.time() - start_date_time)))
-        count_index += 1
+        for i, face in enumerate(unknown_faces):
+            start_date_time = time.time()
+            print(i)
+            print(face)
+            # for each_criminal_encoding in criminal_cache:
+            #     if compare_faces_with_encodings(each_criminal_encoding, unknown_face_image_encodings,
+            #                                     "eachWantedCriminalPath"):
+            #         cv2.imwrite('{}criminal-frame{:d}.jpg'.format(CAPTURED_CRIMINALS_PATH, count_index),
+            #                     unknown_face_image)
+            #         requests.post(CRIMINAL_NOTIFICATION_URL)
+            #
+            # for each_known_encoding in known_person_cache:
+            #     if compare_faces_with_encodings(each_known_encoding, unknown_face_image_encodings,
+            #                                     "eachWantedKnownPath"):
+            #         cv2.imwrite('{}known-frame{:d}.jpg'.format(KNOWN_VISITORS_PATH, count_index),
+            #                     unknown_face_image)
+            #         requests.post(FRIEND_NOTIFICATION_URL)
+            # logger.debug("Total comparison time is {0} seconds".format((time.time() - start_date_time)))
+            # count_index += 1
 
 
 def extract_face(image_path):
     detected_faces = DeepFace.detectFace(image_path, enforce_detection=False)
-    if len(detected_faces) == 0:
-        return None
-    else:
-        # Assume only one face is detected
-        face_image = detected_faces[0]["image"]
-        return face_image
+    return detected_faces
 
 
 def compare_faces(known_image_encoding, unknown_image_encoding, each_wanted_criminal_path):
