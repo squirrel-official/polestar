@@ -12,6 +12,8 @@ def detect_objects(image):
     for result in all_results:
         print('ANil23')
         print(result)
+        print(result['class'])
+        print(result[0])
         print('ANil23')
 
     results = [obj for obj in all_results if obj[0] == "person"]
