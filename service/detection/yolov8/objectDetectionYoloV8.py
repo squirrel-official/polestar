@@ -7,14 +7,13 @@ model = YOLO('yolov8n.pt')  # You can choose other models like 'yolov8s.pt', 'yo
 
 
 def detect_objects(image):
-    results = model(image, stream=True)
-    print('anil1')
-    print(results)
     print(model.names)
+    all_results = model(image, stream=True)
+    results = [obj for obj in all_results if obj[0] == "person"]
+
     print(type(results))
 
     found = False
-
     for result in results:
         boxes = result.boxes
         for box in boxes:
@@ -27,17 +26,3 @@ def detect_objects(image):
             print("Class name -->", cls)
 
     return found
-
-    # for result in results:
-    #     boxes = result.boxes  # Boxes object for bounding box outputs
-    #     masks = result.masks  # Masks object for segmentation masks outputs
-    #     keypoints = result.keypoints  # Keypoints object for pose outputs
-    #     probs = result.probs  # Probs object for classification outputs
-    # print('Anil-boxes')
-    # print(boxes)
-    # print('Anil-masks')
-    # print(masks)
-    # print('Anil-keypoints')
-    # print(keypoints)
-    # print('Anil-probs')
-    # print(probs)
