@@ -11,11 +11,23 @@ def detect_objects(image):
     print(results)
     print(type(results))
 
-    for result in results:
-        boxes = result.boxes  # Boxes object for bounding box outputs
-        masks = result.masks  # Masks object for segmentation masks outputs
-        keypoints = result.keypoints  # Keypoints object for pose outputs
-        probs = result.probs  # Probs object for classification outputs
+    high_probability_objects = []
+    for class_label, confidence, bbox in results:
+        if confidence > 0.5:  # Adjust threshold as needed
+            high_probability_objects.append((class_label, confidence, bbox))
+
+    if high_probability_objects:
+        print("High probability objects detected:")
+        for class_label, confidence, bbox in high_probability_objects:
+            print(f"Class: {class_label}, Confidence: {confidence}, Bounding Box: {bbox}")
+    else:
+        print("No high probability objects detected.")
+
+    # for result in results:
+    #     boxes = result.boxes  # Boxes object for bounding box outputs
+    #     masks = result.masks  # Masks object for segmentation masks outputs
+    #     keypoints = result.keypoints  # Keypoints object for pose outputs
+    #     probs = result.probs  # Probs object for classification outputs
         # print('Anil-boxes')
         # print(boxes)
         # print('Anil-masks')
