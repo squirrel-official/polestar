@@ -1,4 +1,3 @@
-import cv2
 import math
 from ultralytics import YOLO
 
@@ -9,32 +8,16 @@ model = YOLO('yolov8n.pt')  # You can choose other models like 'yolov8s.pt', 'yo
 def detect_objects(image):
     # in future this needs  to be done on stream so that the all results are produced continuously
     all_results = model(image, stream=True)
-
     for result in all_results:
         classes = result.boxes.cls
         confidences = result.boxes.conf
         for i in range(len(classes)):
             class_type = classes[i]
             confidence = confidences[i]
-            if confidence > 0.5:
+            confidence = math.ceil(confidence * 100)
+            if confidence > 50:
                 print(class_type)
                 print(confidence)
-
-    results = [obj for obj in all_results if obj[0] == "person"]
-
-    print(type(results))
-    print(results)
-
-    found = False
-    for result in results:
-        boxes = result.boxes
-        for box in boxes:
-            # confidence
-            confidence = math.ceil((box.conf[0] * 100)) / 100
-            print("Confidence --->", confidence)
-            found = True
-            # class name
-            cls = int(box.cls[0])
-            print("Class name -->", cls)
+                found = True
 
     return found
