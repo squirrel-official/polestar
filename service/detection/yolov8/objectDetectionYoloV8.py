@@ -9,9 +9,16 @@ model = YOLO('yolov8n.pt')  # You can choose other models like 'yolov8s.pt', 'yo
 def detect_objects(image):
     # print(model.names)
     all_results = model(image, stream=True)
+    print(len(all_results))
     for result in all_results:
-        print(result.boxes.cls)
-        print(result.boxes.conf)
+        classes = result.boxes.cls
+        confidences = result.boxes.conf
+        for i in range(len(classes)):
+            class_type = classes[i]
+            confidence = confidences[i]
+            if confidence > 0.5:
+                print(class_type)
+                print(confidence)
 
     results = [obj for obj in all_results if obj[0] == "person"]
 
