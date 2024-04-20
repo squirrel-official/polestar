@@ -26,7 +26,7 @@ FRIEND_NOTIFICATION_URL = 'http://my-security.local:8087/friend'
 
 
 def analyze_face(image, count_index, criminal_cache, known_person_cache):
-    unknown_face_image = extract_face(image, enforce_detection=False)
+    unknown_face_image = extract_face(image)
     if unknown_face_image is not None:
         logger.debug('A new person identified by face so processing it')
         unknown_face_image_encodings = extract_unknown_face_encodings(unknown_face_image)
@@ -50,7 +50,7 @@ def analyze_face(image, count_index, criminal_cache, known_person_cache):
 
 
 def extract_face(image_path):
-    detected_faces = DeepFace.detectFace(image_path, enforce_detection=True)
+    detected_faces = DeepFace.detectFace(image_path, enforce_detection=False)
     if len(detected_faces) == 0:
         return None
     else:
