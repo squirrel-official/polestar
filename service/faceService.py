@@ -25,55 +25,16 @@ VISITOR_NOTIFICATION_URL = 'http://my-security.local:8087/visitor'
 FRIEND_NOTIFICATION_URL = 'http://my-security.local:8087/friend'
 
 
-def analyze_face(image, count_index, criminal_cache, known_person_cache):
-    unknown_faces = extract_face(image)
+def analyze_face(image, criminal_cache, known_person_cache):
+    unknown_faces = DeepFace.detectFace(image, enforce_detection=False)
     if unknown_faces is not None:
         logger.debug('A new person identified by face so processing it')
-        for i, face in enumerate(unknown_faces):
-            start_date_time = time.time()
-            print(i)
+        for face in enumerate(unknown_faces):
             print(face)
-            # for each_criminal_encoding in criminal_cache:
-            #     if compare_faces_with_encodings(each_criminal_encoding, unknown_face_image_encodings,
-            #                                     "eachWantedCriminalPath"):
-            #         cv2.imwrite('{}criminal-frame{:d}.jpg'.format(CAPTURED_CRIMINALS_PATH, count_index),
-            #                     unknown_face_image)
-            #         requests.post(CRIMINAL_NOTIFICATION_URL)
-            #
-            # for each_known_encoding in known_person_cache:
-            #     if compare_faces_with_encodings(each_known_encoding, unknown_face_image_encodings,
-            #                                     "eachWantedKnownPath"):
-            #         cv2.imwrite('{}known-frame{:d}.jpg'.format(KNOWN_VISITORS_PATH, count_index),
-            #                     unknown_face_image)
-            #         requests.post(FRIEND_NOTIFICATION_URL)
-            # logger.debug("Total comparison time is {0} seconds".format((time.time() - start_date_time)))
-            # count_index += 1
-
-
-def extract_face(image_path):
-    detected_faces = DeepFace.detectFace(image_path, enforce_detection=False)
-    return detected_faces
-
-
-def compare_faces(known_image_encoding, unknown_image_encoding, each_wanted_criminal_path):
-    # Detect faces in the unknown image
-    unknown_faces = DeepFace.detectFace(unknown_image_encoding, enforce_detection=True)
-
-    # If no faces are detected in the unknown image, return False
-    if unknown_faces is None:
-        return False
-
-    # Iterate through each detected face in the unknown image
-    for unknown_face in unknown_faces:
-        # Verify if the detected face matches the known face
-        result = DeepFace.verify(known_image_encoding, unknown_face)
-        # If the faces match, print a message and return True
-        if result["verified"]:
-            print(f"Face comparison match with {each_wanted_criminal_path}")
-            return True
-
-    # If no matching faces are found, return False
-    return False
+            for each_criminal in criminal_cache:
+                result = DeepFace.verify(face, each_criminal)
+                print(result)
+                print(result["verified"])
 
 
 def extract_unknown_face_encodings(unknown_image):
