@@ -10,13 +10,8 @@ def detect_objects(image):
     # print(model.names)
     all_results = model(image, stream=True)
     for result in all_results:
-        print('ANil23')
-        print(result.boxes)
-        print('ANil23')
-        print(result.names)
-        print('ANil23')
         print(result.boxes.cls)
-        print('ANil23')
+        print(result.boxes.conf)
 
     results = [obj for obj in all_results if obj[0] == "person"]
 
