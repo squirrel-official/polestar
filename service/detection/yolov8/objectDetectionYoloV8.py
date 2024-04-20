@@ -23,7 +23,7 @@ def detect_objects(image):
             x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)  # convert to int values
 
             # put box in cam
-            cv2.rectangle(image, (x1, y1), (x2, y2), (255, 0, 255), 3)
+            # cv2.rectangle(image, (x1, y1), (x2, y2), (255, 0, 255), 3)
 
             # confidence
             confidence = math.ceil((box.conf[0] * 100)) / 100
