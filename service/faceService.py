@@ -25,14 +25,18 @@ VISITOR_NOTIFICATION_URL = 'http://my-security.local:8087/visitor'
 FRIEND_NOTIFICATION_URL = 'http://my-security.local:8087/friend'
 
 
-def analyze_face(image, criminal_cache, known_person_cache):
+def facial_comparison_checks(image, criminal_cache, known_person_cache):
     unknown_faces = DeepFace.detectFace(image, enforce_detection=False)
     if unknown_faces is not None:
         logger.debug('A new person identified by face so processing it')
         for face in enumerate(unknown_faces):
-            print(face)
             for each_criminal in criminal_cache:
                 result = DeepFace.verify(face, each_criminal)
+                print(result)
+                print(result["verified"])
+
+            for each_known_person in known_person_cache:
+                result = DeepFace.verify(face, each_known_person)
                 print(result)
                 print(result["verified"])
 

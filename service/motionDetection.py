@@ -6,7 +6,7 @@ from picamera2 import Picamera2
 from queue import Queue
 from customLogging.customLogging import get_logger
 from detection.yolov8.objectDetectionYoloV8 import detect_objects
-from faceService import analyze_face
+from faceService import facial_comparison_checks
 from imageLoadService import load_criminal_images, load_known_images
 from threading import Thread
 
@@ -73,7 +73,7 @@ def process_frame(image, criminal_cache, known_person_cache, detection_counter):
         complete_file_name = UNKNOWN_VISITORS_PATH + str(detection_counter) + '.jpg'
         print(complete_file_name)
         cv2.imwrite(complete_file_name, image)
-        analyze_face(image, criminal_cache, known_person_cache)
+        facial_comparison_checks(image, criminal_cache, known_person_cache)
 
     if (time.time() - detection_counter) > 3 and object_detection_flag == 1:
         object_detection_flag = 0
