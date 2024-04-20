@@ -7,9 +7,9 @@ model = YOLO('yolov8n.pt')  # You can choose other models like 'yolov8s.pt', 'yo
 
 
 def detect_objects(image):
-    # print(model.names)
+    # in future this needs  to be done on stream so that the all results are produced continuously
     all_results = model(image, stream=True)
-    print(len(all_results))
+
     for result in all_results:
         classes = result.boxes.cls
         confidences = result.boxes.conf
