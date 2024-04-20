@@ -10,6 +10,7 @@ def detect_objects(image):
     results = model(image, stream=True)
     print('anil1')
     print(results)
+    print(model.names)
     print(type(results))
 
     found = False
