@@ -71,6 +71,7 @@ def process_frame(image, criminal_cache, known_person_cache, detection_counter):
             detection_counter = time.time()
             object_detection_flag = 1
         complete_file_name = UNKNOWN_VISITORS_PATH + "-" + str(detection_counter) + '.jpg'
+        print(complete_file_name)
         cv2.imwrite(complete_file_name, image)
         analyze_face(image, criminal_cache, known_person_cache)
 
