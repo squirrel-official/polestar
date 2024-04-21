@@ -44,3 +44,13 @@ pip3 install tf-keras --break-system-packages
 
 pip3 install ultralytics
 sudo chmod -R 777 .
+
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt install openjdk-17-jdk -y
+
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk install gradle
+
