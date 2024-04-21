@@ -7,7 +7,6 @@ model = YOLO('yolov8n.pt')  # You can choose other models like 'yolov8s.pt', 'yo
 
 
 def detect_objects(image, timestamp, dir_path):
-    start_date_time = time.time()
     # in future this needs  to be done on stream so that the all results are produced continuously
     all_results = model(image, stream=True)
     found = False
@@ -26,5 +25,4 @@ def detect_objects(image, timestamp, dir_path):
                 result.save(filename= complete_file_name)
                 found = True
 
-    print("total time {0} seconds".format( (time.time() - start_date_time)))
     return found
