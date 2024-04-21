@@ -26,5 +26,5 @@ def detect_objects(image, timestamp, dir_path):
                 result.save(filename= complete_file_name)
                 found = True
 
-    print("total time {1} seconds".format( (time.time() - start_date_time)))
+    print("total time {0} seconds".format( (time.time() - start_date_time)))
     return found
