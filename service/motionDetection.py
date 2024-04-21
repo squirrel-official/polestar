@@ -1,5 +1,4 @@
 import time
-import cv2
 import requests
 
 from picamera2 import Picamera2
