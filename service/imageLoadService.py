@@ -19,11 +19,10 @@ def load_criminal_images():
         try:
             results = DeepFace.detectFace(eachWantedCriminalPath)
             if len(results) > 0:
-                criminal_image_encoding = DeepFace.represent(eachWantedCriminalPath, model_name='ArcFace')
-                criminal_cache.append(criminal_image_encoding)
+                criminal_image = DeepFace.represent(eachWantedCriminalPath, model_name='ArcFace')
+                criminal_cache.append(criminal_image)
         except Exception as e:
             logger.error("An exception occurred while reading {0}: {1}".format(eachWantedCriminalPath, str(e)))
-    # Once the loading is done then print
     logger.info(
         "Loaded {0} criminal images in {1} seconds".format(len(criminal_cache), (time.time() - start_date_time)))
     return criminal_cache
@@ -40,7 +39,6 @@ def load_known_images():
                 known_person_cache.append(known_person_image_encoding)
         except Exception as e:
             logger.error("An exception occurred while reading {0}: {1}".format(eachWantedKnownPersonPath, str(e)))
-    # Once the loading is done then print
     logger.info(
         "Loaded {0} known images in {1} seconds".format(len(known_person_cache), (time.time() - start_date_time)))
     return known_person_cache
