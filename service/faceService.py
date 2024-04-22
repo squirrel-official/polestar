@@ -1,10 +1,5 @@
-import time
-import numpy as np
 from customLogging.customLogging import get_logger
-from PIL import Image
-import cv2
 from deepface import DeepFace
-import requests
 
 logger = get_logger("FaceComparisonUtil")
 MOTION_VIDEO_URL = '/var/lib/motion/*'
@@ -29,24 +24,19 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache, model):
     unknown_faces = DeepFace.extract_faces(image, enforce_detection=False)
     if unknown_faces is not None:
         logger.debug('A new person identified by face so processing it')
-        for face in enumerate(unknown_faces):
+        for unknown_face in enumerate(unknown_faces):
             for each_criminal in enumerate(criminal_cache):
                 # face tuple's 2nd  element has facial encodings
-                face_array = face[1]['face'];
-                print(type(each_criminal))
-                criminal = each_criminal[1]
-                print(criminal[0])
-                criminal_val = criminal[0]
-                print(criminal_val)
-                print(criminal_val['embedding'])
-                result = DeepFace.verify(face_array, criminal_val['embedding'], enforce_detection=False,
+                unknown_face_encoding = unknown_face[1]['face']
+                criminal_face_encoding = each_criminal[1][0]
+                result = DeepFace.verify(unknown_face_encoding, criminal_face_encoding['embedding'], enforce_detection=False,
                                          model_name=model)
                 # result = DeepFace.verify(face, face)
                 print(result)
                 print(result["verified"])
 
             for each_known_person in known_person_cache:
-                result = DeepFace.verify(face, each_known_person)
+                result = DeepFace.verify(unknown_face_encoding, each_known_person)
                 print(result)
                 print(result["verified"])
 
