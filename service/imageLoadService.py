@@ -18,7 +18,7 @@ def load_criminal_images(model):
     for eachWantedCriminalPath in glob.glob(WANTED_CRIMINALS_PATH):
         try:
             criminal_image = DeepFace.represent(eachWantedCriminalPath, model_name = model)
-            print(criminal_image)
+            # print(criminal_image)
             print(criminal_image[0])
             print(criminal_image[0]['embedding'])
             criminal_cache.append(criminal_image[1][0]['embedding'])
