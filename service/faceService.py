@@ -30,7 +30,7 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache):
     if unknown_faces is not None:
         logger.debug('A new person identified by face so processing it')
         for face in enumerate(unknown_faces):
-            for each_criminal in criminal_cache:
+            for each_criminal in enumerate(criminal_cache):
                 # face tuple's 2nd  element has facial encodings
                 face_array = face[1]['face'];
                 print(type(each_criminal))
