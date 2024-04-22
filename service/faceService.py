@@ -33,6 +33,7 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache):
             for each_criminal in criminal_cache:
                 print(face)
                 print(face[0])
+                print(face[0]["face"])
                 print(type(face))
                 print(type(each_criminal))
                 result = DeepFace.verify(face, each_criminal)
