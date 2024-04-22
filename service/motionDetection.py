@@ -1,4 +1,3 @@
-import concurrent
 import time
 import requests
 
@@ -8,7 +7,6 @@ from customLogging.customLogging import get_logger
 from detection.yolov8.objectDetectionYoloV8 import detect_objects
 from faceService import facial_comparison_checks
 from imageLoadService import load_criminal_images, load_known_images
-from threading import Thread
 
 # Data Models path
 ssd_model_path = '/usr/local/polestar/model/coco-ssd-mobilenet'
@@ -37,7 +35,7 @@ models = [
     "GhostFaceNet",
 ]
 
-selected_model = models[1];
+selected_model = models[7];
 
 
 def monitor_camera_stream(criminal_cache, known_person_cache):
@@ -57,16 +55,15 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
         time_between_captures = 1 / frame_rate
 
         max_workers = 2  # Adjust the maximum number of threads as needed
-        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-            while True:
-                frame = camera.capture_array()
-                # Convert YUV frame to RGB for processing
-                frame = frame[..., ::-1]
-                # Process the frame in a separate thread (non-blocking)
-                executor.submit(process_frame, frame, criminal_cache, known_person_cache, detection_counter)
+        while True:
+            frame = camera.capture_array()
+            # Convert YUV frame to RGB for processing
+            frame = frame[..., ::-1]
+            # Process the frame in a separate thread (non-blocking)
+            process_frame(frame, criminal_cache, known_person_cache, detection_counter)
 
-                time.sleep(time_between_captures)
-                frame_count += 1
+            time.sleep(time_between_captures)
+            frame_count += 1
     except Exception as e:
         logger.error("An exception occurred in capture thread.")
         logger.error(e, exc_info=True)
