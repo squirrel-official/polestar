@@ -26,13 +26,16 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache, model):
     unknown_faces = DeepFace.extract_faces(image, enforce_detection=False)
     if unknown_faces is not None:
         logger.debug('A new person identified by face so processing it')
-        start_time = time.time()
-        res = DeepFace.find(img_path=unknown_faces, db_path='/usr/local/polestar/data/wanted-criminals/')
-        print('Time for find {0}', time.time() - start_time)
         for unknown_face in enumerate(unknown_faces):
             for criminal_face_encoding in enumerate(criminal_cache):
                 # face tuple's 2nd  element has facial encodings
                 unknown_face_encoding = unknown_face[1]['face']
+
+                start_time = time.time()
+                res = DeepFace.find(img_path=unknown_face_encoding,
+                                    db_path='/usr/local/polestar/data/wanted-criminals/')
+                print('Time for find {0}', time.time() - start_time)
+
                 start_time = time.time()
                 result = DeepFace.verify(unknown_face_encoding, criminal_face_encoding[1], enforce_detection=False,
                                          model_name=model)
