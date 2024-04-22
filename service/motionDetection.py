@@ -23,6 +23,20 @@ logger = get_logger("Motion Detection")
 # Queues for captured frames and notification data
 frame_queue = Queue()
 notification_queue = Queue()
+models = [
+    "VGG-Face",
+    "Facenet",
+    "Facenet512",
+    "OpenFace",
+    "DeepFace",
+    "DeepID",
+    "ArcFace",
+    "Dlib",
+    "SFace",
+    "GhostFaceNet",
+]
+
+selected_model = models[0];
 
 
 def monitor_camera_stream(criminal_cache, known_person_cache):
@@ -64,8 +78,8 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
 def process_frame(image, criminal_cache, known_person_cache, detection_counter):
     detection_time = time.time()
     print('processing frame')
-    if detect_objects(image,detection_time, UNKNOWN_VISITORS_PATH):
-        facial_comparison_checks(image, criminal_cache, known_person_cache)
+    if detect_objects(image, detection_time, UNKNOWN_VISITORS_PATH):
+        facial_comparison_checks(image, criminal_cache, known_person_cache, selected_model)
 
 
 def send_notification(notification_url):
@@ -79,8 +93,8 @@ def send_notification(notification_url):
 
 def start_monitoring():
     try:
-        criminal_cache = load_criminal_images()
-        known_person_cache = load_known_images()
+        criminal_cache = load_criminal_images(selected_model)
+        known_person_cache = load_known_images(selected_model)
         p1 = Thread(target=monitor_camera_stream, args=(criminal_cache, known_person_cache,))
         p1.start()
     except Exception as e:

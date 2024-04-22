@@ -25,8 +25,8 @@ VISITOR_NOTIFICATION_URL = 'http://my-security.local:8087/visitor'
 FRIEND_NOTIFICATION_URL = 'http://my-security.local:8087/friend'
 
 
-def facial_comparison_checks(image, criminal_cache, known_person_cache):
-    unknown_faces = DeepFace.extract_faces(image, enforce_detection=False)
+def facial_comparison_checks(image, criminal_cache, known_person_cache, model):
+    unknown_faces = DeepFace.extract_faces(image, enforce_detection=False, model_name=model)
     if unknown_faces is not None:
         logger.debug('A new person identified by face so processing it')
         for face in enumerate(unknown_faces):
@@ -39,7 +39,8 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache):
                 criminal_val = criminal[0]
                 print(criminal_val)
                 print(criminal_val['embedding'])
-                result = DeepFace.verify(face_array, criminal_val['embedding'], enforce_detection=False)
+                result = DeepFace.verify(face_array, criminal_val['embedding'], enforce_detection=False,
+                                         model_name=model)
                 # result = DeepFace.verify(face, face)
                 print(result)
                 print(result["verified"])
@@ -50,9 +51,9 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache):
                 print(result["verified"])
 
 
-def extract_unknown_face_encodings(unknown_image):
+def extract_unknown_face_encodings(unknown_image, model):
     # Detect faces in the unknown image
-    unknown_faces = DeepFace.detectFace(unknown_image, enforce_detection=True)
+    unknown_faces = DeepFace.detectFace(unknown_image, enforce_detection=True, model_name=model)
 
     # Initialize a list to store unknown face encodings
     unknown_face_encoding_list = []
@@ -60,7 +61,7 @@ def extract_unknown_face_encodings(unknown_image):
     # Iterate through each detected face in the unknown image
     for unknown_face in unknown_faces:
         # Calculate the encoding for the detected face
-        unknown_face_encoding = DeepFace.represent(unknown_face, enforce_detection=True)
+        unknown_face_encoding = DeepFace.represent(unknown_face, enforce_detection=True, model_name=model)
         # Append the encoding to the list
         unknown_face_encoding_list.append(unknown_face_encoding)
 
@@ -82,13 +83,13 @@ def compare_faces_with_encodings(known_image_encoding, unknown_image_encoding_li
     return False
 
 
-def compare_faces_with_path(known_image_path, unknown_image_path):
+def compare_faces_with_path(known_image_path, unknown_image_path, model):
     # Load known image and encode the face
-    known_face = DeepFace.detectFace(known_image_path, enforce_detection=True)
-    known_encoding = DeepFace.represent(known_face, enforce_detection=True)
+    known_face = DeepFace.detectFace(known_image_path, enforce_detection=True, model_name=model)
+    known_encoding = DeepFace.represent(known_face, enforce_detection=True, model_name=model)
 
     # Load unknown image and detect faces
-    unknown_faces = DeepFace.detectFace(unknown_image_path, enforce_detection=True)
+    unknown_faces = DeepFace.detectFace(unknown_image_path, enforce_detection=True, model_name=model)
 
     # Iterate through each detected face in the unknown image
     for unknown_face in unknown_faces:
