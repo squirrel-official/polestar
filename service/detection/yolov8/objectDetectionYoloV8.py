@@ -1,5 +1,6 @@
 import math
 from ultralytics import YOLO
+
 # Load the YOLOv8 model (replace with your desired model path)
 
 model = YOLO('yolov8n.pt')  # You can choose other models like 'yolov8s.pt', 'yolov8m.pt', etc.
@@ -16,10 +17,14 @@ def detect_objects(image, timestamp, dir_path):
             class_type = classes[i]
             confidence = confidences[i]
             confidence = math.ceil(confidence * 100)
-            if confidence > 50:
+            print(class_type)
+            if class_type == '0':
+                print('class type person')
+
+            if class_type == '0' and confidence > 50:
                 print("Object detected, now saving it")
                 complete_file_name = dir_path + str(timestamp) + '.jpg'
-                result.save(filename= complete_file_name)
+                result.save(filename=complete_file_name)
                 found = True
 
     return found
