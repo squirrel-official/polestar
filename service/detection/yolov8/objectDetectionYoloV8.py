@@ -17,7 +17,9 @@ def detect_objects(image, timestamp, dir_path):
             class_type = classes[i]
             confidence = confidences[i]
             confidence = math.ceil(confidence * 100)
+            print('Anil')
             print(class_type)
+            print(class_type == '0')
             if class_type == '0':
                 print('class type person')
 
