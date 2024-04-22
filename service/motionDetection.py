@@ -1,3 +1,4 @@
+import concurrent
 import time
 import requests
 
@@ -50,21 +51,18 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
 
         # Start the camera stream (without preview)
         camera.start()
-
         frame_count = 1
-        image_count = 1
-        object_detection_flag = 0
         detection_counter = time.time()
 
-        while True:
-            # Get a frame and metadata from the camera
-            frame = camera.capture_array()
-
-            # Convert YUV frame to RGB for processing
-            frame = frame[..., ::-1]
-            # Process the frame in a separate thread (non-blocking)
-            process_frame(frame, criminal_cache, known_person_cache, detection_counter)
-            frame_count += 1
+        max_workers = 5  # Adjust the maximum number of threads as needed
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            while True:
+                frame = camera.capture_array()
+                # Convert YUV frame to RGB for processing
+                frame = frame[..., ::-1]
+                # Process the frame in a separate thread (non-blocking)
+                executor.submit(process_frame, frame, criminal_cache, known_person_cache, detection_counter)
+                frame_count += 1
     except Exception as e:
         logger.error("An exception occurred in capture thread.")
         logger.error(e, exc_info=True)
@@ -92,8 +90,7 @@ def start_monitoring():
     try:
         criminal_cache = load_criminal_images(selected_model)
         known_person_cache = load_known_images(selected_model)
-        p1 = Thread(target=monitor_camera_stream, args=(criminal_cache, known_person_cache,))
-        p1.start()
+        monitor_camera_stream(criminal_cache, known_person_cache)
     except Exception as e:
         logger.error("An exception occurred.")
         logger.error(e, exc_info=True)
