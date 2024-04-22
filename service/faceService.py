@@ -59,35 +59,4 @@ def extract_unknown_face_encodings(unknown_image, model):
     return unknown_face_encoding_list
 
 
-def compare_faces_with_encodings(known_image_encoding, unknown_image_encoding_list, each_wanted_criminal_path):
-    # Iterate through each unknown face encoding
-    for each_unknown_face_encoding in unknown_image_encoding_list:
-        # Compare the unknown face encoding with the known face encoding
-        result = DeepFace.verify(known_image_encoding, each_unknown_face_encoding)
-        # If the faces match, print a message and return True
-        if result["verified"]:
-            print(f"Face comparison match with {each_wanted_criminal_path}")
-            return True
 
-    # If no matching faces are found, return False
-    return False
-
-
-def compare_faces_with_path(known_image_path, unknown_image_path, model):
-    # Load known image and encode the face
-    known_face = DeepFace.detectFace(known_image_path, enforce_detection=True, model_name=model)
-    known_encoding = DeepFace.represent(known_face, enforce_detection=True, model_name=model)
-
-    # Load unknown image and detect faces
-    unknown_faces = DeepFace.detectFace(unknown_image_path, enforce_detection=True, model_name=model)
-
-    # Iterate through each detected face in the unknown image
-    for unknown_face in unknown_faces:
-        # Compare the unknown face with the known face
-        result = DeepFace.verify(known_encoding, unknown_face)
-        # If the faces match, return True
-        if result["verified"]:
-            return True
-
-    # If no matching faces are found, return False
-    return False
