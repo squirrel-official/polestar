@@ -9,7 +9,6 @@ model = YOLO('yolov8n.pt')  # You can choose other models like 'yolov8s.pt', 'yo
 def detect_objects(image, timestamp, dir_path):
     # in future this needs  to be done on stream so that the all results are produced continuously
     all_results = model(image, stream=True)
-    found = False
     for result in all_results:
         classes = result.boxes.cls
         confidences = result.boxes.conf
@@ -21,6 +20,6 @@ def detect_objects(image, timestamp, dir_path):
                 print("Human found,saving picture")
                 complete_file_name = dir_path + str(timestamp) + '.jpg'
                 result.save(filename=complete_file_name)
-                found = True
+                return True
 
-    return found
+    return False
