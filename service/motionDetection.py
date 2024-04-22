@@ -37,7 +37,7 @@ models = [
     "GhostFaceNet",
 ]
 
-selected_model = models[0];
+selected_model = models[1];
 
 
 def monitor_camera_stream(criminal_cache, known_person_cache):
