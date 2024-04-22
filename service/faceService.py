@@ -32,7 +32,7 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache, model):
                 unknown_face_encoding = unknown_face[1]['face']
 
                 start_time = time.time()
-                res = DeepFace.find(img_path=unknown_face_encoding,
+                DeepFace.find(img_path=unknown_face_encoding,
                                     db_path='/usr/local/polestar/data/wanted-criminals/', enforce_detection=False)
                 print('Time for find {0}', time.time() - start_time)
 
