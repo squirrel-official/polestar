@@ -26,7 +26,7 @@ FRIEND_NOTIFICATION_URL = 'http://my-security.local:8087/friend'
 
 
 def facial_comparison_checks(image, criminal_cache, known_person_cache, model):
-    unknown_faces = DeepFace.extract_faces(image, enforce_detection=False,  model=model)
+    unknown_faces = DeepFace.extract_faces(image, enforce_detection=False)
     if unknown_faces is not None:
         logger.debug('A new person identified by face so processing it')
         for face in enumerate(unknown_faces):
