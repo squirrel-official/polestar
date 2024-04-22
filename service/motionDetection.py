@@ -9,8 +9,7 @@ from faceService import facial_comparison_checks
 from imageLoadService import load_criminal_images, load_known_images
 
 # Data Models path
-ssd_model_path = '/usr/local/polestar/model/coco-ssd-mobilenet'
-efficientdet_lite0_path = '/usr/local/polestar/model/efficientdet-lite0/efficientdet_lite0.tflite'
+
 
 # For writing
 UNKNOWN_VISITORS_PATH = '/usr/local/polestar/detections/unknown-visitors/'
@@ -38,7 +37,7 @@ models = [
 selected_model = models[6];
 
 
-def monitor_camera_stream(criminal_cache, known_person_cache):
+def monitor_camera_stream():
     try:
         # Create a Picamera2 instance
         camera = Picamera2()
@@ -60,7 +59,7 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
             # Convert YUV frame to RGB for processing
             frame = frame[..., ::-1]
             # Process the frame in a separate thread (non-blocking)
-            process_frame(frame, criminal_cache, known_person_cache, detection_counter)
+            process_frame(frame, detection_counter)
 
             time.sleep(time_between_captures)
             frame_count += 1
@@ -71,12 +70,10 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
         camera.close()
 
 
-def process_frame(image, criminal_cache, known_person_cache, detection_counter):
+def process_frame(image, detection_counter):
     detection_time = time.time()
     if detect_objects(image, detection_time, UNKNOWN_VISITORS_PATH):
-        start_time = time.time()
-        facial_comparison_checks(image, criminal_cache, known_person_cache, selected_model)
-        print('total comparison time {0}', time.time() - start_time)
+        facial_comparison_checks(image, selected_model)
 
 
 def send_notification(notification_url):
@@ -90,9 +87,7 @@ def send_notification(notification_url):
 
 def start_monitoring():
     try:
-        criminal_cache = load_criminal_images(selected_model)
-        known_person_cache = load_known_images(selected_model)
-        monitor_camera_stream(criminal_cache, known_person_cache)
+        monitor_camera_stream()
     except Exception as e:
         logger.error("An exception occurred.")
         logger.error(e, exc_info=True)
