@@ -31,10 +31,8 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache):
         logger.debug('A new person identified by face so processing it')
         for face in enumerate(unknown_faces):
             for each_criminal in criminal_cache:
-                print(face[1])
-                print('face value internal')
+                # face tuple's 2nd  element has facial encodings
                 face_array = face[1]['face'];
-                print(face[1]['face'])
                 print(each_criminal)
                 result = DeepFace.verify(face_array, each_criminal, enforce_detection=False)
                 # result = DeepFace.verify(face, face)
