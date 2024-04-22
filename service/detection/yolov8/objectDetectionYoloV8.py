@@ -19,11 +19,11 @@ def detect_objects(image, timestamp, dir_path):
             confidence = math.ceil(confidence * 100)
             print('Anil')
             print(class_type)
-            print(class_type == '0')
-            if class_type == '0':
+            print(class_type == 0)
+            if class_type == 0:
                 print('class type person')
 
-            if class_type == '0' and confidence > 50:
+            if class_type == 0 and confidence > 50:
                 print("Object detected, now saving it")
                 complete_file_name = dir_path + str(timestamp) + '.jpg'
                 result.save(filename=complete_file_name)
