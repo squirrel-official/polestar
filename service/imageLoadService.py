@@ -18,10 +18,8 @@ def load_criminal_images(model):
     for eachWantedCriminalPath in glob.glob(WANTED_CRIMINALS_PATH):
         try:
             criminal_image = DeepFace.represent(eachWantedCriminalPath, model_name = model)
-            # print(criminal_image)
-            print(criminal_image[0])
             print(criminal_image[0]['embedding'])
-            criminal_cache.append(criminal_image[1][0]['embedding'])
+            criminal_cache.append(criminal_image[0]['embedding'])
         except Exception as e:
             logger.error("An exception occurred while reading {0}: {1}".format(eachWantedCriminalPath, str(e)))
     logger.info(
@@ -35,7 +33,7 @@ def load_known_images(model):
     for eachWantedKnownPersonPath in glob.glob(FAMILIAR_FACES_PATH):
         try:
             known_person_image = DeepFace.represent(eachWantedKnownPersonPath, model_name = model)
-            known_person_cache.append(known_person_image[1][0]['embedding'])
+            known_person_cache.append(known_person_image[0]['embedding'])
         except Exception as e:
             logger.error("An exception occurred while reading {0}: {1}".format(eachWantedKnownPersonPath, str(e)))
     logger.info(
