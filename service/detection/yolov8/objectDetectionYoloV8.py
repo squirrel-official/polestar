@@ -3,7 +3,7 @@ from ultralytics import YOLO
 
 # Load the YOLOv8 model (replace with your desired model path)
 
-model = YOLO('yolov8n.pt')  # You can choose other models like 'yolov8s.pt', 'yolov8m.pt', etc.
+model = YOLO('yolov8s.pt')  # You can choose other models like 'yolov8n.pt','yolov8s.pt', 'yolov8m.pt', etc.
 
 
 def detect_objects(image, timestamp, dir_path):
