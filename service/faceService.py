@@ -36,7 +36,9 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache):
                 print(type(each_criminal))
                 criminal = each_criminal[1]
                 print(criminal[0])
-                print(criminal['embedding'])
+                criminal_val = criminal[0]
+                print(criminal_val)
+                print(criminal_val['embedding'])
                 result = DeepFace.verify(face_array, each_criminal, enforce_detection=False)
                 # result = DeepFace.verify(face, face)
                 print(result)
