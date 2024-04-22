@@ -36,6 +36,5 @@ def facial_comparison_checks(image):
             print(criminal_result)
 
             friend_result = DeepFace.find(img_path=unknown_face_encoding,
-                                          db_path=FAMILIAR_FACES_PATH, detector_backend=detectors[4],
-                                          model_name='Facenet512',enforce_detection=False)
+                                          db_path=FAMILIAR_FACES_PATH,enforce_detection=False)
             print(friend_result)
