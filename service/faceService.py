@@ -1,5 +1,5 @@
 import time
-
+import numpy as np
 from customLogging.customLogging import get_logger
 from PIL import Image
 import cv2
@@ -33,9 +33,10 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache):
             for each_criminal in criminal_cache:
                 print(type(face))
                 print(type(each_criminal))
-                print(type(DeepFace.represent(face)))
+                print(type(np.array(face)))
+                print(type(DeepFace.represent(np.array(face))))
                 print(type(DeepFace.represent(each_criminal)))
-                result = DeepFace.verify(DeepFace.represent(face), each_criminal)
+                result = DeepFace.verify(DeepFace.represent(np.array(face)), each_criminal)
                 print(result)
                 print(result["verified"])
 
