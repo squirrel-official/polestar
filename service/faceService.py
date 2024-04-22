@@ -25,10 +25,9 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache, model):
     if unknown_faces is not None:
         logger.debug('A new person identified by face so processing it')
         for unknown_face in enumerate(unknown_faces):
-            for each_criminal in enumerate(criminal_cache):
+            for criminal_face_encoding in enumerate(criminal_cache):
                 # face tuple's 2nd  element has facial encodings
                 unknown_face_encoding = unknown_face[1]['face']
-                criminal_face_encoding = each_criminal[1][0]['embedding']
                 result = DeepFace.verify(unknown_face_encoding, criminal_face_encoding, enforce_detection=False,
                                          model_name=model)
                 # result = DeepFace.verify(unknown_face_encoding, unknown_face_encoding,enforce_detection=False)
@@ -36,8 +35,8 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache, model):
                 if face_match:
                     return True
 
-            for each_known_person in known_person_cache:
-                result = DeepFace.verify(unknown_face_encoding, each_known_person)
+            for each_known_person_encoding in known_person_cache:
+                result = DeepFace.verify(unknown_face_encoding, each_known_person_encoding)
                 print(result["verified"])
 
 
