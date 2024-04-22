@@ -31,12 +31,10 @@ def facial_comparison_checks(image):
             # face tuple's 2nd  element has facial encodings
             unknown_face_encoding = unknown_face[1]['face']
 
-            start_time = time.time()
             criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                             db_path=WANTED_CRIMINALS_PATH, detector_backend=detectors[1],
                                             enforce_detection=False)
             print(criminal_result)
-            print('Time for find {0}', time.time() - start_time)
 
             friend_result = DeepFace.find(img_path=unknown_face_encoding,
                                           db_path=FAMILIAR_FACES_PATH, detector_backend=detectors[1],
