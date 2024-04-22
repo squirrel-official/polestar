@@ -82,7 +82,6 @@ def process_frame(image, criminal_cache, known_person_cache, detection_counter):
         facial_comparison_checks(image, criminal_cache, known_person_cache, selected_model)
 
 
-
 def send_notification(notification_url):
     try:
         data = requests.post(notification_url)
