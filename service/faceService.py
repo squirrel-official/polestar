@@ -29,15 +29,14 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache, model):
                 # face tuple's 2nd  element has facial encodings
                 unknown_face_encoding = unknown_face[1]['face']
                 criminal_face_encoding = each_criminal[1][0]
-                result = DeepFace.verify(unknown_face_encoding, criminal_face_encoding['embedding'], enforce_detection=False,
-                                         model_name=model)
-                # result = DeepFace.verify(face, face)
+                # result = DeepFace.verify(unknown_face_encoding, criminal_face_encoding['embedding'], enforce_detection=False,
+                #                          model_name=model)
+                result = DeepFace.verify(face, face)
                 print(result)
                 print(result["verified"])
 
             for each_known_person in known_person_cache:
                 result = DeepFace.verify(unknown_face_encoding, each_known_person)
-                print(result)
                 print(result["verified"])
 
 
