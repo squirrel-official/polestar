@@ -27,7 +27,7 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache, model):
     if unknown_faces is not None:
         logger.debug('A new person identified by face so processing it')
         start_time = time.time()
-        res = DeepFace.find(unknown_faces, '/usr/local/polestar/data/wanted-criminals/')
+        res = DeepFace.find(img_path=unknown_faces, db_path='/usr/local/polestar/data/wanted-criminals/')
         print('Time for find {0}', time.time() - start_time)
         for unknown_face in enumerate(unknown_faces):
             for criminal_face_encoding in enumerate(criminal_cache):
