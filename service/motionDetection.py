@@ -64,9 +64,6 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
             frame = frame[..., ::-1]
             # Process the frame in a separate thread (non-blocking)
             process_frame(frame, criminal_cache, known_person_cache, detection_counter)
-            # process_frame_thread = Thread(target=process_frame,
-            #                               args=(frame, criminal_cache, known_person_cache))
-            # process_frame_thread.start()
             frame_count += 1
     except Exception as e:
         logger.error("An exception occurred in capture thread.")
