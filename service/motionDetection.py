@@ -53,8 +53,10 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
         camera.start()
         frame_count = 1
         detection_counter = time.time()
+        frame_rate = 2  # 2 frames per second
+        time_between_captures = 1 / frame_rate
 
-        max_workers = 5  # Adjust the maximum number of threads as needed
+        max_workers = 2  # Adjust the maximum number of threads as needed
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             while True:
                 frame = camera.capture_array()
@@ -62,6 +64,8 @@ def monitor_camera_stream(criminal_cache, known_person_cache):
                 frame = frame[..., ::-1]
                 # Process the frame in a separate thread (non-blocking)
                 executor.submit(process_frame, frame, criminal_cache, known_person_cache, detection_counter)
+
+                time.sleep(time_between_captures)
                 frame_count += 1
     except Exception as e:
         logger.error("An exception occurred in capture thread.")
