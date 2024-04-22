@@ -37,6 +37,7 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache, model):
                 face_match = result["verified"]
                 if face_match:
                     print('face  verification success')
+                    print(face_match)
                     return True
 
             for each_known_person_encoding in known_person_cache:
