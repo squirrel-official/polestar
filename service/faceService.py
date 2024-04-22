@@ -22,7 +22,8 @@ VISITOR_NOTIFICATION_URL = 'http://my-security.local:8087/visitor'
 FRIEND_NOTIFICATION_URL = 'http://my-security.local:8087/friend'
 
 
-def facial_comparison_checks(image, model):
+def facial_comparison_checks(image):
+    detectors = ["opencv", "ssd", "mtcnn", "dlib", "retinaface"]
     unknown_faces = DeepFace.extract_faces(image, enforce_detection=False)
     if unknown_faces is not None:
         logger.debug('A new person identified by face so processing it')
@@ -32,11 +33,12 @@ def facial_comparison_checks(image, model):
 
             start_time = time.time()
             criminal_result = DeepFace.find(img_path=unknown_face_encoding,
-                                            db_path=WANTED_CRIMINALS_PATH, enforce_detection=False)
+                                            db_path=WANTED_CRIMINALS_PATH, detector_backend=detectors[4],
+                                            enforce_detection=False)
             print(criminal_result)
             print('Time for find {0}', time.time() - start_time)
 
             friend_result = DeepFace.find(img_path=unknown_face_encoding,
-                                          db_path=FAMILIAR_FACES_PATH, enforce_detection=False)
+                                          db_path=FAMILIAR_FACES_PATH, detector_backend=detectors[4],
+                                          enforce_detection=False)
             print(friend_result)
-

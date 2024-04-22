@@ -6,10 +6,6 @@ from queue import Queue
 from customLogging.customLogging import get_logger
 from detection.yolov8.objectDetectionYoloV8 import detect_objects
 from faceService import facial_comparison_checks
-from imageLoadService import load_criminal_images, load_known_images
-
-# Data Models path
-
 
 # For writing
 UNKNOWN_VISITORS_PATH = '/usr/local/polestar/detections/unknown-visitors/'
@@ -21,20 +17,6 @@ logger = get_logger("Motion Detection")
 # Queues for captured frames and notification data
 frame_queue = Queue()
 notification_queue = Queue()
-models = [
-    "VGG-Face",
-    "Facenet",
-    "Facenet512",
-    "OpenFace",
-    "DeepFace",
-    "DeepID",
-    "ArcFace",
-    "Dlib",
-    "SFace",
-    "GhostFaceNet",
-]
-
-selected_model = models[6];
 
 
 def monitor_camera_stream():
@@ -73,7 +55,7 @@ def monitor_camera_stream():
 def process_frame(image, detection_counter):
     detection_time = time.time()
     if detect_objects(image, detection_time, UNKNOWN_VISITORS_PATH):
-        facial_comparison_checks(image, selected_model)
+        facial_comparison_checks(image)
 
 
 def send_notification(notification_url):
