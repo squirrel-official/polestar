@@ -1,3 +1,5 @@
+import time
+
 from customLogging.customLogging import get_logger
 from deepface import DeepFace
 
@@ -28,11 +30,13 @@ def facial_comparison_checks(image, criminal_cache, known_person_cache, model):
             for criminal_face_encoding in enumerate(criminal_cache):
                 # face tuple's 2nd  element has facial encodings
                 unknown_face_encoding = unknown_face[1]['face']
+                start_time = time.time()
                 result = DeepFace.verify(unknown_face_encoding, criminal_face_encoding[1], enforce_detection=False,
                                          model_name=model)
-                # result = DeepFace.verify(unknown_face_encoding, unknown_face_encoding,enforce_detection=False)
+                print('Time for one comparison {0]',time.time()-start_time)
                 face_match = result["verified"]
                 if face_match:
+                    print('face  verification success')
                     return True
 
             for each_known_person_encoding in known_person_cache:
