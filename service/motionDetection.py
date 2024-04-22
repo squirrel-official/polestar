@@ -76,7 +76,8 @@ def process_frame(image, criminal_cache, known_person_cache, detection_counter):
     if detect_objects(image, detection_time, UNKNOWN_VISITORS_PATH):
         start_time = time.time()
         facial_comparison_checks(image, criminal_cache, known_person_cache, selected_model)
-        print('total comparison time {0}', time.time()-start_time)
+        print('total comparison time {0}', time.time() - start_time)
+
 
 def send_notification(notification_url):
     try:
