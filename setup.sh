@@ -54,3 +54,8 @@ curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk install gradle
 
+cd /usr/local/
+sudo chmod -R 777 .
+
+git clone https://github.com/squirrel-official/polestar-konnect.git
+
