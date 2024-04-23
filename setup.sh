@@ -46,6 +46,7 @@ pip3 install ultralytics
 sudo chmod -R 777 .
 
 
+
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt install openjdk-17-jdk -y
@@ -56,6 +57,7 @@ sdk install gradle
 
 cd /usr/local/
 sudo chmod -R 777 .
-
 git clone https://github.com/squirrel-official/polestar-konnect.git
+cd polestar-konnect
+gradle clean build
 
