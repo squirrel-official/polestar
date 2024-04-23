@@ -10,7 +10,7 @@ from faceService import facial_comparison_checks
 # For writing
 UNKNOWN_VISITORS_PATH = '/usr/local/polestar/detections/unknown-visitors/'
 
-NOTIFICATION_URL = 'http://my-security.local:8087/visitor'
+VISITOR_NOTIFICATION_URL = 'http://research.local:8087/visitor'
 count = 0
 logger = get_logger("Motion Detection")
 
@@ -34,14 +34,14 @@ def monitor_camera_stream():
         detection_counter = time.time()
         frame_rate = 2  # 2 frames per second
         time_between_captures = 1 / frame_rate
-
+        last_detection_notification_time = time.time();
         max_workers = 2  # Adjust the maximum number of threads as needed
         while True:
             frame = camera.capture_array()
             # Convert YUV frame to RGB for processing
             frame = frame[..., ::-1]
             # Process the frame in a separate thread (non-blocking)
-            process_frame(frame, detection_counter)
+            process_frame(frame, last_detection_notification_time)
 
             time.sleep(time_between_captures)
             frame_count += 1
@@ -52,9 +52,12 @@ def monitor_camera_stream():
         camera.close()
 
 
-def process_frame(image, detection_counter):
-    detection_time = time.time()
-    if detect_objects(image, detection_time, UNKNOWN_VISITORS_PATH):
+def process_frame(image, last_detection_notification_time):
+    if detect_objects(image, time.time(), UNKNOWN_VISITORS_PATH):
+        if time.time() - last_detection_notification_time > 30:
+            send_notification(VISITOR_NOTIFICATION_URL)
+            last_detection_notification_time = time.time()
+
         facial_comparison_checks(image)
 
 
