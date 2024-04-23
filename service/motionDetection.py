@@ -55,6 +55,7 @@ def monitor_camera_stream():
 def process_frame(image, last_detection_notification_time):
     if detect_objects(image, time.time(), UNKNOWN_VISITORS_PATH):
         if time.time() - last_detection_notification_time > 30:
+            print('Sending the Visitor notifications:  {0}', VISITOR_NOTIFICATION_URL)
             send_notification(VISITOR_NOTIFICATION_URL)
             last_detection_notification_time = time.time()
 
