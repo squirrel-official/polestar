@@ -1,4 +1,4 @@
-import time
+import cv2
 
 from customLogging.customLogging import get_logger
 from deepface import DeepFace
@@ -26,7 +26,7 @@ def facial_comparison_checks(image):
             for unknown_face in enumerate(unknown_faces):
                 # face tuple's 2nd  element has facial encodings
                 unknown_face_encoding = unknown_face[1]['face']
-
+                cv2.imwrite('usr/local/polestar/detections/unknown-visitors/face.jpeg', unknown_face_encoding)
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                                 db_path=WANTED_CRIMINALS_PATH,enforce_detection=False)
                 print(criminal_result)
