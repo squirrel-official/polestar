@@ -2,6 +2,7 @@ import cv2
 
 from customLogging.customLogging import get_logger
 from deepface import DeepFace
+from PIL import Image
 
 logger = get_logger("FaceComparisonUtil")
 MOTION_VIDEO_URL = '/var/lib/motion/*'
@@ -26,13 +27,19 @@ def facial_comparison_checks(image):
             for unknown_face in enumerate(unknown_faces):
                 # face tuple's 2nd  element has facial encodings
                 unknown_face_encoding = unknown_face[1]['face']
-                cv2.imwrite('/usr/local/polestar/detections/unknown-visitors/face.jpeg', unknown_face_encoding)
+                immgg = cv2.normalize(unknown_face_encoding, dst=None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX,
+                                      dtype=cv2.CV_8U)
+                cv2.imwrite('/usr/local/polestar/detections/unknown-visitors/face.jpeg', immgg)
+
+                im = Image.fromarray(unknown_face_encoding)
+                im.save('/usr/local/polestar/detections/unknown-visitors/face1.jpeg')
+
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
-                                                db_path=WANTED_CRIMINALS_PATH,enforce_detection=False)
+                                                db_path=WANTED_CRIMINALS_PATH, enforce_detection=False)
                 print(criminal_result)
 
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
-                                              db_path=FAMILIAR_FACES_PATH,enforce_detection=False)
+                                              db_path=FAMILIAR_FACES_PATH, enforce_detection=False)
                 print(friend_result)
     except Exception as e:
         logger.error(e)
