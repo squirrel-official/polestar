@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 from customLogging.customLogging import get_logger
 from deepface import DeepFace
@@ -31,7 +32,7 @@ def facial_comparison_checks(image):
                                       dtype=cv2.CV_8U)
                 cv2.imwrite('/usr/local/polestar/detections/unknown-visitors/face.jpeg', immgg)
                 print('anil')
-                im = Image.fromarray(unknown_face_encoding)
+                im = Image.fromarray((unknown_face_encoding * 255).astype(np.uint8))
                 im.save('/usr/local/polestar/detections/unknown-visitors/face1.jpeg')
 
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
