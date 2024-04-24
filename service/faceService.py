@@ -21,19 +21,28 @@ FRIEND_NOTIFICATION_URL = 'http://my-security.local:8087/friend'
 
 def facial_comparison_checks(image):
     detectors = ["opencv", "ssd", "mtcnn", "dlib", "retinaface"]
+    backends = [
+        'opencv',
+        'ssd',
+        'dlib',
+        'mtcnn',
+        'fastmtcnn',
+        'retinaface',
+        'mediapipe',
+        'yolov8',
+        'yunet',
+        'centerface',
+    ]
+
     try:
-        unknown_faces = DeepFace.extract_faces(image, enforce_detection=True)
+        unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[5])
         if unknown_faces is not None:
             logger.debug('A new person identified by face so processing it')
             for unknown_face in enumerate(unknown_faces):
                 # face tuple's 2nd  element has facial encodings
                 unknown_face_encoding = unknown_face[1]['face']
-                immgg = cv2.normalize(unknown_face_encoding, dst=None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX,
-                                      dtype=cv2.CV_8U)
-                cv2.imwrite('/usr/local/polestar/detections/unknown-visitors/face.jpeg', immgg)
-                print('anil')
                 im = Image.fromarray((unknown_face_encoding * 255).astype(np.uint8))
-                im.save('/usr/local/polestar/detections/unknown-visitors/face1.jpeg')
+                im.save('/usr/local/polestar/detections/unknown-visitors/face.jpeg')
 
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                                 db_path=WANTED_CRIMINALS_PATH, enforce_detection=False)
