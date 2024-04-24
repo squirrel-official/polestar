@@ -30,7 +30,7 @@ def facial_comparison_checks(image):
                 immgg = cv2.normalize(unknown_face_encoding, dst=None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX,
                                       dtype=cv2.CV_8U)
                 cv2.imwrite('/usr/local/polestar/detections/unknown-visitors/face.jpeg', immgg)
-
+                print('anil')
                 im = Image.fromarray(unknown_face_encoding)
                 im.save('/usr/local/polestar/detections/unknown-visitors/face1.jpeg')
 
