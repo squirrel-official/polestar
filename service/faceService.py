@@ -1,3 +1,5 @@
+import time
+
 import cv2
 import numpy as np
 
@@ -35,9 +37,10 @@ def facial_comparison_checks(image):
     ]
 
     try:
+        start_time = time.time()
         unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[5])
         if unknown_faces is not None:
-            logger.debug('A new person identified by face so processing it')
+            logger.debug('face extraction success , total time : {0}', time.time() - start_time)
             for unknown_face in enumerate(unknown_faces):
                 # face tuple's 2nd  element has facial encodings
                 unknown_face_encoding = unknown_face[1]['face']
