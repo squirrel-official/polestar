@@ -26,6 +26,7 @@ def facial_comparison_checks(image):
             for unknown_face in enumerate(unknown_faces):
                 # face tuple's 2nd  element has facial encodings
                 unknown_face_encoding = unknown_face[1]['face']
+                print(unknown_face[1])
                 cv2.imwrite('usr/local/polestar/detections/unknown-visitors/face.jpeg', unknown_face[1])
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                                 db_path=WANTED_CRIMINALS_PATH,enforce_detection=False)
