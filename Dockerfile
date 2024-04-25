@@ -1,5 +1,11 @@
 # Use Ubuntu 20.04 as base image
-FROM ubuntu:20.04
+# Use ARM-compatible base image for Raspberry Pi 4
+FROM arm64v8/ubuntu:20.04
+
+
+RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
+ARG DEBIAN_FRONTEND=noninteractive
+
 
 # Update package lists and install necessary packages
 RUN apt-get update && \
