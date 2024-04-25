@@ -25,10 +25,7 @@ def facial_comparison_checks(image):
     detectors = ["opencv", "ssd", "mtcnn", "dlib", "retinaface"]
     models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
     backends = [
-        'yunet',
-        'opencv',
-        'ssd',
-        'yolov8'
+        'yunet','opencv','ssd','yolov8'
     ]
     try:
         start_time = time.time()
@@ -43,11 +40,12 @@ def facial_comparison_checks(image):
                 im.save('/usr/local/polestar/detections/unknown-visitors/face.jpeg')
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                                 db_path=WANTED_CRIMINALS_PATH, enforce_detection=False,
-                                                model_name='DeepID2')
+                                                detector_backend=backends[0]
+                                                )
                 print(criminal_result)
 
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
-                                              db_path=FAMILIAR_FACES_PATH, enforce_detection=False)
+                                              db_path=FAMILIAR_FACES_PATH, enforce_detection=False, detector_backend=backends[0])
                 print(friend_result)
     except Exception as e:
         logger.error(e)
