@@ -25,7 +25,7 @@ def monitor_camera_stream():
         camera = Picamera2()
 
         # Configure the still capture stream (no preview)
-        config = camera.create_still_configuration(main={"size": (1024, 768)})
+        config = camera.create_still_configuration(main={"size": (2560, 1440)})
         camera.configure(config)
 
         # Start the camera stream (without preview)
