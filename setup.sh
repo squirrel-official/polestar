@@ -42,7 +42,7 @@ pip3 install deepface  --break-system-package
 pip3 install tf-keras --break-system-packages
 pip install mediapipe --break-system-packages
 pip install facenet-pytorch --break-system-packages
-pip3 install ultralytics
+pip3 install ultralytics --break-system-packages
 sudo chmod -R 777 .
 
 

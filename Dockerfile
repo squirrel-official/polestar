@@ -1,10 +1,7 @@
 # Use Ubuntu 20.04 as base image
 FROM ubuntu:20.04
 
-# Set the working directory to /usr/local
-WORKDIR /usr/local
-
-# Update package lists and install necessary dependencies
+# Update package lists and install necessary packages
 RUN apt-get update && \
     apt-get install -y \
     python3-pip \
@@ -17,6 +14,8 @@ RUN apt-get update && \
     libsm6 \
     libxext6 \
     cmake \
+    python3-opencv \
+    python3-h5py \
     libportaudio2 \
     libatlas-base-dev \
     v4l2loopback-dkms \
@@ -25,40 +24,40 @@ RUN apt-get update && \
     curl \
     git
 
-# Add Coral Edge TPU repository and install TFLite runtime
+# Install additional Python packages
+RUN pip3 install Pillow dlib face_recognition numpy opencv-contrib-python tflite-support tensorflow-aarch64 deepface tf-keras mediapipe facenet-pytorch ultralytics
+
+# Install TFLite runtime
 RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | tee /etc/apt/sources.list.d/coral-edgetpu.list && \
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
     apt-get update && \
     apt-get install -y python3-tflite-runtime
 
-# Upgrade pip and install Python packages
-RUN pip3 install --upgrade pip && \
-    pip3 install Pillow dlib face_recognition numpy opencv-contrib-python tflite-support tensorflow-aarch64 python3-h5py deepface tf-keras ultralytics
-
-# Install HDF5 development library
-RUN apt-get install -y pkg-config libhdf5-dev
-
-# Install SDKMAN and Gradle
+# Install SDKMAN for managing Java dependencies
 RUN curl -s "https://get.sdkman.io" | bash && \
-    bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sdk install gradle"
+    source "$HOME/.sdkman/bin/sdkman-init.sh" && \
+    sdk install gradle
 
-RUN git clone https://github.com/squirrel-official/polestar.git
+# Set working directory
+WORKDIR /usr/local/
 
-# Clone the repository and build the project
-RUN git clone https://github.com/squirrel-official/polestar-konnect.git && \
+# Clone repository and build with Gradle
+RUN chmod -R 777 . && \
+    git clone https://github.com/squirrel-official/polestar-konnect.git && \
     cd polestar-konnect && \
     gradle clean build
 
+# Expose any required ports here if needed
+
+# Define any startup commands or entrypoints here if needed
+
+# Cleanup unnecessary packages and caches
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Set permissions
-RUN chmod -R 777 /usr/local
+RUN chmod -R 777 /usr/local/polestar-konnect
 
-# Clear package cache to reduce image size
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Set entrypoint if needed
+ENTRYPOINT ["python3", "/usr/local/polestar/service/motionDetection.py"]
 
-# Set entrypoint or default command if needed
-
-# Example entrypoint:
-# ENTRYPOINT ["python3", "app.py"]
-
-# Example default command:
-# CMD ["python3", "app.py"]
