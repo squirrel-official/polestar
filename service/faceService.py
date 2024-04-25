@@ -49,5 +49,4 @@ def facial_comparison_checks(image):
                 print(friend_result)
     except Exception as e:
         logger.error(e)
-        logger.info('Unable to extract the face from passed frame')
         pass
