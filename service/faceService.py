@@ -23,22 +23,17 @@ FRIEND_NOTIFICATION_URL = 'http://my-security.local:8087/friend'
 
 def facial_comparison_checks(image):
     detectors = ["opencv", "ssd", "mtcnn", "dlib", "retinaface"]
+    models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
     backends = [
+        'yunet',
         'opencv',
         'ssd',
-        'dlib',
-        'mtcnn',
-        'fastmtcnn',
-        'retinaface',
-        'mediapipe',
-        'yolov8',
-        'yunet',
-        'centerface',
+        'yolov8'
     ]
-
     try:
         start_time = time.time()
-        unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[9])
+        # Yunet is fast and accurate as  compared to others in all conditions hence selected it
+        unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[0])
         if unknown_faces is not None:
             logger.debug('face extraction success , total time : '+ str((time.time() - start_time)))
             for unknown_face in enumerate(unknown_faces):
