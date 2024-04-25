@@ -46,9 +46,9 @@ def facial_comparison_checks(image):
                 unknown_face_encoding = unknown_face[1]['face']
                 im = Image.fromarray((unknown_face_encoding * 255).astype(np.uint8))
                 im.save('/usr/local/polestar/detections/unknown-visitors/face.jpeg')
-
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
-                                                db_path=WANTED_CRIMINALS_PATH, enforce_detection=False)
+                                                db_path=WANTED_CRIMINALS_PATH, enforce_detection=False,
+                                                model_name='DeepID2')
                 print(criminal_result)
 
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
