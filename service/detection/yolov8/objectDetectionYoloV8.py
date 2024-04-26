@@ -8,7 +8,7 @@ model = YOLO('yolov8n.pt')  # You can choose other models like 'yolov8n.pt','yol
 
 def detect_objects(image, timestamp, dir_path):
     # in future this needs  to be done on stream so that the all results are produced continuously
-    all_results = model(image, stream=True)
+    all_results = model(image, stream=True, verbose=False)
     for result in all_results:
         classes = result.boxes.cls
         confidences = result.boxes.conf

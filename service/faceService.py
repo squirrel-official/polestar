@@ -29,7 +29,6 @@ def facial_comparison_checks(image):
     ]
     try:
         start_time = time.time()
-        # Yunet is fast and accurate as  compared to others in all conditions hence selected it
         unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[3])
         if unknown_faces is not None:
             logger.debug('face extraction success , total time : ' + str((time.time() - start_time)))
@@ -40,14 +39,12 @@ def facial_comparison_checks(image):
                 im.save('/usr/local/polestar/detections/unknown-visitors/face' + str(time.time()) + '.jpeg')
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                                 db_path=WANTED_CRIMINALS_PATH, enforce_detection=False,
-                                                detector_backend=backends[0],silent=True
-                                                )
+                                                detector_backend=backends[0],silent=True)
                 print(criminal_result)
 
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
                                               db_path=FAMILIAR_FACES_PATH, enforce_detection=False,
                                               detector_backend=backends[0],silent=True)
                 print(friend_result)
-    except Exception as e:
-        logger.error(e)
+    except Exception:
         pass
