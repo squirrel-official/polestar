@@ -25,27 +25,28 @@ def facial_comparison_checks(image):
     detectors = ["opencv", "ssd", "mtcnn", "dlib", "retinaface"]
     models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
     backends = [
-        'yunet','opencv','ssd','yolov8'
+        'yunet', 'opencv', 'ssd', 'yolov8'
     ]
     try:
         start_time = time.time()
         # Yunet is fast and accurate as  compared to others in all conditions hence selected it
-        unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[0])
+        unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[3], silent=True)
         if unknown_faces is not None:
-            logger.debug('face extraction success , total time : '+ str((time.time() - start_time)))
+            logger.debug('face extraction success , total time : ' + str((time.time() - start_time)))
             for unknown_face in enumerate(unknown_faces):
                 # face tuple's 2nd  element has facial encodings
                 unknown_face_encoding = unknown_face[1]['face']
                 im = Image.fromarray((unknown_face_encoding * 255).astype(np.uint8))
-                im.save('/usr/local/polestar/detections/unknown-visitors/face'+ str(time.time())+'.jpeg')
+                im.save('/usr/local/polestar/detections/unknown-visitors/face' + str(time.time()) + '.jpeg')
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                                 db_path=WANTED_CRIMINALS_PATH, enforce_detection=False,
-                                                detector_backend=backends[0]
+                                                detector_backend=backends[0],silent=True
                                                 )
                 print(criminal_result)
 
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
-                                              db_path=FAMILIAR_FACES_PATH, enforce_detection=False, detector_backend=backends[0])
+                                              db_path=FAMILIAR_FACES_PATH, enforce_detection=False,
+                                              detector_backend=backends[0],silent=True)
                 print(friend_result)
     except Exception as e:
         logger.error(e)
