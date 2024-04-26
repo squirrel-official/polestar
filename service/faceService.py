@@ -38,12 +38,12 @@ def facial_comparison_checks(image):
                 im = Image.fromarray((unknown_face_encoding * 255).astype(np.uint8))
                 im.save('/usr/local/polestar/detections/unknown-visitors/face' + str(time.time()) + '.jpeg')
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
-                                                db_path=WANTED_CRIMINALS_PATH, enforce_detection=False,
+                                                db_path=WANTED_CRIMINALS_PATH, enforce_detection=True,
                                                 detector_backend=backends[0],silent=True)
                 print(criminal_result)
 
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
-                                              db_path=FAMILIAR_FACES_PATH, enforce_detection=False,
+                                              db_path=FAMILIAR_FACES_PATH, enforce_detection=True,
                                               detector_backend=backends[0],silent=True)
                 print(friend_result)
     except Exception:
