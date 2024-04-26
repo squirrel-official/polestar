@@ -1,6 +1,6 @@
 import time
 import requests
-
+from libcamera import controls
 from picamera2 import Picamera2
 from queue import Queue
 from customLogging.customLogging import get_logger
@@ -27,7 +27,7 @@ def monitor_camera_stream():
         # Configure the still capture stream (no preview)
         config = camera.create_still_configuration(main={"size": (4056, 3040)})
         camera.configure(config)
-
+        camera.set_controls({"AfMode": controls.AfModeEnum.Continuous})
         # Start the camera stream (without preview)
         camera.start()
         frame_count = 1
