@@ -30,7 +30,7 @@ def facial_comparison_checks(image):
     try:
         start_time = time.time()
         # Yunet is fast and accurate as  compared to others in all conditions hence selected it
-        unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[3], silent=True)
+        unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[3])
         if unknown_faces is not None:
             logger.debug('face extraction success , total time : ' + str((time.time() - start_time)))
             for unknown_face in enumerate(unknown_faces):
