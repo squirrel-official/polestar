@@ -1,7 +1,6 @@
 # Use Ubuntu 20.04 as base image
 # Use ARM-compatible base image for Raspberry Pi 4
-FROM arm64v8/ubuntu:20.04
-
+FROM arm64v8/ubuntu
 
 RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
 ARG DEBIAN_FRONTEND=noninteractive
@@ -31,7 +30,9 @@ RUN apt-get update && \
     git
 
 # Install additional Python packages
-RUN pip3 install Pillow dlib face_recognition numpy opencv-contrib-python tflite-support tensorflow-aarch64 deepface tf-keras mediapipe facenet-pytorch ultralytics
+RUN pip3 install Pillow dlib face_recognition numpy opencv-contrib-python tflite-support tensorflow-aarch64 --break-system-package
+
+RUN pip3 deepface tf-keras facenet-pytorch ultralytics --break-system-package  --break-system-package
 
 # Install TFLite runtime
 RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | tee /etc/apt/sources.list.d/coral-edgetpu.list && \
