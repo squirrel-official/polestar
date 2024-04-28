@@ -1,6 +1,6 @@
 import time
 
-import cv2
+import requests
 import numpy as np
 
 from customLogging.customLogging import get_logger
@@ -16,9 +16,8 @@ ARCHIVE_URL = "/usr/local/polestar/data/archives/"
 WANTED_CRIMINALS_PATH = '/usr/local/polestar/data/wanted-criminals/'
 FAMILIAR_FACES_PATH = '/usr/local/polestar/data/familiar-faces/'
 
-CRIMINAL_NOTIFICATION_URL = 'http://my-security.local:8087/criminal'
-VISITOR_NOTIFICATION_URL = 'http://my-security.local:8087/visitor'
-FRIEND_NOTIFICATION_URL = 'http://my-security.local:8087/friend'
+CRIMINAL_NOTIFICATION_URL = 'http://research.local:8087/criminal'
+FRIEND_NOTIFICATION_URL = 'http://research.local:8087/friend'
 
 
 def facial_comparison_checks(image):
@@ -40,11 +39,23 @@ def facial_comparison_checks(image):
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                                 db_path=WANTED_CRIMINALS_PATH, enforce_detection=True,
                                                 detector_backend=backends[0],silent=False)
-                print(criminal_result)
+                if criminal_result is not None and len(criminal_result) > 0:
+                    send_notification(CRIMINAL_NOTIFICATION_URL)
 
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
                                               db_path=FAMILIAR_FACES_PATH, enforce_detection=True,
                                               detector_backend=backends[0],silent=True)
+                if friend_result is not None and len(friend_result) > 0:
+                    send_notification(FRIEND_NOTIFICATION_URL)
                 print(friend_result)
     except Exception:
         pass
+
+
+def send_notification(notification_url):
+    try:
+        data = requests.post(notification_url)
+        logger.info("Detected activity sent notification, response : {0}".format(data))
+    except Exception as e:
+        logger.error("An exception occurred in notification thread.")
+        logger.error(e, exc_info=True)
