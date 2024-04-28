@@ -1,7 +1,7 @@
 import logging
 
 FORMATTER = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s")
-LOG_FILE = "/usr/local/polestar/logs/service.log"
+LOG_FILE = "/usr/local/polestar/logs/polestar.log"
 
 
 def get_logger(logger_name):
