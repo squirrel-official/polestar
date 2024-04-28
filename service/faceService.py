@@ -42,6 +42,7 @@ def facial_comparison_checks(image):
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                                 db_path=WANTED_CRIMINALS_PATH, enforce_detection=True,
                                                 detector_backend=backends[0], silent=False)
+                print(criminal_result)
                 if criminal_result is not None and len(criminal_result) > 0:
                     print('Suspected criminal found, triggering notification')
                     image.save_as_jpeg(CRIMINAL_SAVE_PATH + str(time.time()) + '.jpeg')
@@ -51,6 +52,7 @@ def facial_comparison_checks(image):
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
                                               db_path=FAMILIAR_FACES_PATH, enforce_detection=True,
                                               detector_backend=backends[0], silent=True)
+                print(friend_result)
                 if friend_result is not None and len(friend_result) > 0:
                     print('Friend/family guests found, triggering notification')
                     image.save_as_jpeg(FAMILIAR_SAVE_PATH + str(time.time()) + '.jpeg')

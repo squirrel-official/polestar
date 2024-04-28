@@ -33,7 +33,7 @@ RUN apt-get install -y \
     git
 # Install additional Python packages
 RUN pip3 install Pillow
-RUN pip3 install dlib
+RUN pip install dlib
 RUN pip3 install face_recognition numpy
 RUN pip3 install numpy
 
