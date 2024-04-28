@@ -43,16 +43,20 @@ def facial_comparison_checks(image):
                                                 db_path=WANTED_CRIMINALS_PATH, enforce_detection=True,
                                                 detector_backend=backends[0], silent=False)
                 if criminal_result is not None and len(criminal_result) > 0:
+                    print('Suspected criminal found, triggering notification')
                     image.save_as_jpeg(CRIMINAL_SAVE_PATH + str(time.time()) + '.jpeg')
                     send_notification(CRIMINAL_NOTIFICATION_URL)
+                    return True
 
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
                                               db_path=FAMILIAR_FACES_PATH, enforce_detection=True,
                                               detector_backend=backends[0], silent=True)
                 if friend_result is not None and len(friend_result) > 0:
+                    print('Friend/family guests found, triggering notification')
                     image.save_as_jpeg(FAMILIAR_SAVE_PATH + str(time.time()) + '.jpeg')
                     send_notification(FRIEND_NOTIFICATION_URL)
-                print(friend_result)
+                    return True
+
     except Exception:
         pass
 
