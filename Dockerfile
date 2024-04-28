@@ -32,9 +32,10 @@ RUN apt-get install -y \
     curl \
     git
 # Install additional Python packages
-RUN pip3 install Pillow dlib
-
+RUN pip3 install Pillow
+RUN pip3 install dlib
 RUN pip3 install face_recognition numpy
+RUN pip3 install numpy
 
 RUN pip3 install opencv-contrib-python tflite-support tensorflow-aarch64 --break-system-packages
 
