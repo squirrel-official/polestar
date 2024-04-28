@@ -1,12 +1,13 @@
 # Use Ubuntu 20.04 as base image
 # Use ARM-compatible base image for Raspberry Pi 4
-FROM arm64v8/ubuntu
+FROM arm64v8/ubuntu:20.04
 
 RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
 ARG DEBIAN_FRONTEND=noninteractive
 
 
 # Update package lists and install necessary packages
+
 RUN apt-get update && \
     apt-get install -y \
     python3-pip \
@@ -14,7 +15,9 @@ RUN apt-get update && \
     zlib1g-dev \
     libssl-dev \
     libgtk2.0-dev \
-    pkg-config \
+    pkg-config
+
+RUN apt-get install -y \
     ffmpeg \
     libsm6 \
     libxext6 \
@@ -22,13 +25,12 @@ RUN apt-get update && \
     python3-opencv \
     python3-h5py \
     libportaudio2 \
-    libatlas-base-dev \
-    v4l2loopback-dkms \
-    avahi-dnsconfd \
+    libatlas-base-dev
+
+RUN apt-get install -y \
     openjdk-17-jdk \
     curl \
     git
-
 # Install additional Python packages
 RUN pip3 install Pillow dlib face_recognition numpy opencv-contrib-python tflite-support tensorflow-aarch64 --break-system-package
 
