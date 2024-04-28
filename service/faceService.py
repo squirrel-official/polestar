@@ -26,9 +26,7 @@ FRIEND_NOTIFICATION_URL = 'http://research.local:8087/friend'
 def facial_comparison_checks(image):
     detectors = ["opencv", "ssd", "mtcnn", "dlib", "retinaface"]
     models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
-    backends = [
-        'yunet', 'opencv', 'ssd', 'yolov8'
-    ]
+    backends = ['opencv', 'ssd', 'yolov8']
     try:
         start_time = time.time()
         unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[3])
@@ -41,7 +39,7 @@ def facial_comparison_checks(image):
                 im.save('/usr/local/polestar/detections/unknown-visitors/face' + str(time.time()) + '.jpeg')
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                                 db_path=WANTED_CRIMINALS_PATH, enforce_detection=True,
-                                                detector_backend=backends[0], silent=False)
+                                                detector_backend=backends[3], silent=False)
                 print(criminal_result)
                 if criminal_result is not None and len(criminal_result) > 0:
                     print('Suspected criminal found, triggering notification')
@@ -51,7 +49,7 @@ def facial_comparison_checks(image):
 
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
                                               db_path=FAMILIAR_FACES_PATH, enforce_detection=True,
-                                              detector_backend=backends[0], silent=True)
+                                              detector_backend=backends[3], silent=True)
                 print(friend_result)
                 if friend_result is not None and len(friend_result) > 0:
                     print('Friend/family guests found, triggering notification')
@@ -59,7 +57,8 @@ def facial_comparison_checks(image):
                     send_notification(FRIEND_NOTIFICATION_URL)
                     return True
 
-    except Exception:
+    except Exception as e:
+        logger.error(e)
         pass
 
 
