@@ -29,7 +29,7 @@ def facial_comparison_checks(image):
     backends = ['opencv', 'ssd', 'yolov8']
     try:
         start_time = time.time()
-        unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[3])
+        unknown_faces = DeepFace.extract_faces(image, enforce_detection=True, detector_backend=backends[2])
         if unknown_faces is not None:
             logger.debug('face extraction success , total time : ' + str((time.time() - start_time)))
             for unknown_face in enumerate(unknown_faces):
@@ -39,7 +39,7 @@ def facial_comparison_checks(image):
                 im.save('/usr/local/polestar/detections/unknown-visitors/face' + str(time.time()) + '.jpeg')
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                                 db_path=WANTED_CRIMINALS_PATH, enforce_detection=True,
-                                                detector_backend=backends[3], silent=False)
+                                                detector_backend=backends[2], silent=False)
                 print(criminal_result)
                 if criminal_result is not None and len(criminal_result) > 0:
                     print('Suspected criminal found, triggering notification')
@@ -49,7 +49,7 @@ def facial_comparison_checks(image):
 
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
                                               db_path=FAMILIAR_FACES_PATH, enforce_detection=True,
-                                              detector_backend=backends[3], silent=True)
+                                              detector_backend=backends[2], silent=True)
                 print(friend_result)
                 if friend_result is not None and len(friend_result) > 0:
                     print('Friend/family guests found, triggering notification')
