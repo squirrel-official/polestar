@@ -16,6 +16,9 @@ ARCHIVE_URL = "/usr/local/polestar/data/archives/"
 WANTED_CRIMINALS_PATH = '/usr/local/polestar/data/wanted-criminals/'
 FAMILIAR_FACES_PATH = '/usr/local/polestar/data/familiar-faces/'
 
+CRIMINAL_SAVE_PATH = '/usr/local/polestar/detections/captured-criminals/'
+FAMILIAR_SAVE_PATH = '/usr/local/polestar/detections/familiar-faces/'
+
 CRIMINAL_NOTIFICATION_URL = 'http://research.local:8087/criminal'
 FRIEND_NOTIFICATION_URL = 'http://research.local:8087/friend'
 
@@ -38,14 +41,16 @@ def facial_comparison_checks(image):
                 im.save('/usr/local/polestar/detections/unknown-visitors/face' + str(time.time()) + '.jpeg')
                 criminal_result = DeepFace.find(img_path=unknown_face_encoding,
                                                 db_path=WANTED_CRIMINALS_PATH, enforce_detection=True,
-                                                detector_backend=backends[0],silent=False)
+                                                detector_backend=backends[0], silent=False)
                 if criminal_result is not None and len(criminal_result) > 0:
+                    image.save_as_jpeg(CRIMINAL_SAVE_PATH + str(time.time()) + '.jpeg')
                     send_notification(CRIMINAL_NOTIFICATION_URL)
 
                 friend_result = DeepFace.find(img_path=unknown_face_encoding,
                                               db_path=FAMILIAR_FACES_PATH, enforce_detection=True,
-                                              detector_backend=backends[0],silent=True)
+                                              detector_backend=backends[0], silent=True)
                 if friend_result is not None and len(friend_result) > 0:
+                    image.save_as_jpeg(FAMILIAR_SAVE_PATH + str(time.time()) + '.jpeg')
                     send_notification(FRIEND_NOTIFICATION_URL)
                 print(friend_result)
     except Exception:
