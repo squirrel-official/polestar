@@ -25,7 +25,6 @@ FRIEND_NOTIFICATION_URL = 'http://research.local:8087/friend'
 
 def facial_comparison_checks(image):
     detectors = ["opencv", "ssd", "mtcnn", "dlib", "retinaface"]
-    models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
     backends = ['opencv', 'ssd', 'yolov8']
     try:
         start_time = time.time()

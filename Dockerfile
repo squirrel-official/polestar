@@ -33,13 +33,14 @@ RUN apt-get install -y \
     git
 # Install additional Python packages
 RUN pip3 install Pillow
-RUN pip install dlib
+RUN pip install dlib -vvv
 RUN pip3 install face_recognition numpy
 RUN pip3 install numpy
+RUN pip3 install opencv-contrib-python
+RUN pip3 install tflite-support tensorflow-aarch64
+RUN pip3 deepface tf-keras facenet-pytorch ultralytics
 
-RUN pip3 install opencv-contrib-python tflite-support tensorflow-aarch64 --break-system-packages
 
-RUN pip3 deepface tf-keras facenet-pytorch ultralytics --break-system-package  --break-system-packages
 
 # Install TFLite runtime
 RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | tee /etc/apt/sources.list.d/coral-edgetpu.list && \
