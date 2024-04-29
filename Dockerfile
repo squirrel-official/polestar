@@ -37,7 +37,7 @@ RUN pip install dlib -vvv
 RUN pip3 install face_recognition numpy
 RUN pip3 install numpy
 RUN pip3 install opencv-contrib-python
-RUN pip3 install tflite-support
+RUN pip3 install tflite-support  -vvv
 RUN pip3 install tflite-supporttensorflow-aarch64  -vvv
 RUN pip3 deepface tf-keras facenet-pytorch ultralytics
 
