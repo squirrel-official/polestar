@@ -68,21 +68,18 @@ RUN gradle --version
 
 # Set working directory
 WORKDIR /usr/local/
+RUN git clone https://github.com/squirrel-official/polestar.git
 RUN git clone https://github.com/squirrel-official/polestar-konnect.git && cd polestar-konnect
 
 WORKDIR /usr/local/polestar-konnect
 RUN gradle clean build
-
-# Expose any required ports here if needed
-
-# Define any startup commands or entrypoints here if needed
+RUN ls
 
 # Cleanup unnecessary packages and caches
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Set permissions
-#RUN chmod -R 777 /usr/local/polestar-konnect
+EXPOSE 8087
 
 # Set entrypoint if needed
 ENTRYPOINT ["python3", "/usr/local/polestar/service/motionDetection.py"]
