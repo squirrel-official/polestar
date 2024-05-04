@@ -68,12 +68,13 @@ RUN gradle --version
 
 # Set working directory
 WORKDIR /usr/local/
-RUN git clone https://github.com/squirrel-official/polestar.git
-RUN git clone https://github.com/squirrel-official/polestar-konnect.git && cd polestar-konnect
 
-WORKDIR /usr/local/polestar-konnect
-RUN gradle clean build
-RUN ls
+RUN git clone https://github.com/squirrel-official/polestar-konnect.git && \
+    git clone https://github.com/squirrel-official/polestar.git
+
+
+RUN cd polestar-konnect && \
+    gradle clean build
 
 # Cleanup unnecessary packages and caches
 RUN apt-get clean && \
