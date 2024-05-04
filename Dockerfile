@@ -38,8 +38,9 @@ RUN pip3 install face_recognition numpy
 RUN pip3 install numpy
 RUN pip3 install opencv-contrib-python
 RUN pip3 install tflite-support  -vvv
-RUN pip3 install tflite-supporttensorflow-aarch64  -vvv
-RUN pip3 deepface tf-keras facenet-pytorch ultralytics
+RUN pip3 install --upgrade pip
+RUN pip3 install deepface tf-keras facenet-pytorch ultralytics
+RUN pip3 install tensorflow-aarch64  -vvv
 
 
 
@@ -49,19 +50,28 @@ RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" |
     apt-get update && \
     apt-get install -y python3-tflite-runtime
 
-# Install SDKMAN for managing Java dependencies
-RUN curl -s "https://get.sdkman.io" | bash && \
-    source "$HOME/.sdkman/bin/sdkman-init.sh" && \
-    sdk install gradle
+
+RUN apt-get install -y unzip zip wget
+
+ENV GRADLE_VERSION=8.7
+RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && mkdir /opt/gradle \
+    && unzip -d /opt/gradle gradle-${GRADLE_VERSION}-bin.zip \
+    && rm gradle-${GRADLE_VERSION}-bin.zip
+
+# Set Gradle path
+ENV PATH=$PATH:/opt/gradle/gradle-${GRADLE_VERSION}/bin
+
+# Verify installation
+RUN gradle --version
+
 
 # Set working directory
 WORKDIR /usr/local/
+RUN git clone https://github.com/squirrel-official/polestar-konnect.git && cd polestar-konnect
 
-# Clone repository and build with Gradle
-RUN chmod -R 777 . && \
-    git clone https://github.com/squirrel-official/polestar-konnect.git && \
-    cd polestar-konnect && \
-    gradle clean build
+WORKDIR /usr/local/polestar-konnect
+RUN gradle clean build
 
 # Expose any required ports here if needed
 
@@ -72,7 +82,7 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Set permissions
-RUN chmod -R 777 /usr/local/polestar-konnect
+#RUN chmod -R 777 /usr/local/polestar-konnect
 
 # Set entrypoint if needed
 ENTRYPOINT ["python3", "/usr/local/polestar/service/motionDetection.py"]
