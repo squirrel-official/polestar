@@ -85,7 +85,7 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* \
 
 RUN pip3 install picamera2
-RUN  python3 "/usr/local/polestar/service/motionDetection.py"
+#RUN  python3 "/usr/local/polestar/service/motionDetection.py"
 
 EXPOSE 8087
 

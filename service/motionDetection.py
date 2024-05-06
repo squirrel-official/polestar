@@ -1,5 +1,5 @@
 import sys
-sys.path.append("/opt/libcamera")
+sys.path.append("opt/libcamera")
 import time
 import requests
 from libcamera import controls
