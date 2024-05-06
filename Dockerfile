@@ -58,12 +58,9 @@ RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.
     && mkdir /opt/gradle \
     && unzip -d /opt/gradle gradle-${GRADLE_VERSION}-bin.zip \
     && rm gradle-${GRADLE_VERSION}-bin.zip
-
 # Set Gradle path
 ENV PATH=$PATH:/opt/gradle/gradle-${GRADLE_VERSION}/bin
 
-# Verify installation
-RUN gradle --version
 
 RUN pip3 install meson
 RUN pip3 install ply
@@ -73,9 +70,10 @@ RUN cd /opt \
     && git clone https://github.com/raspberrypi/libcamera.git
 WORKDIR /opt/libcamera
 RUN meson build
+#RUN ninja -C build install -j4 --prefix=/opt/libcamera
+ENV export INSTALL_PREFIX=/opt/libcamera
 RUN ninja -C build install -j4
 
-RUN gradle --version
 WORKDIR /usr/local/
 RUN git clone https://github.com/squirrel-official/polestar.git
 #RUN git clone https://github.com/squirrel-official/polestar-konnect.git
