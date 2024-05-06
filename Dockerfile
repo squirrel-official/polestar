@@ -73,6 +73,7 @@ RUN meson build
 #RUN ninja -C build install -j4 --prefix=/opt/libcamera
 ENV export INSTALL_PREFIX=/opt/libcamera
 RUN ninja -C build install -j4
+RUN echo "hello"
 
 WORKDIR /usr/local/
 RUN git clone https://github.com/squirrel-official/polestar.git
@@ -85,7 +86,7 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* \
 
 RUN pip3 install picamera2
-#RUN  python3 "/usr/local/polestar/service/motionDetection.py"
+RUN  python3 "/usr/local/polestar/service/motionDetection.py"
 
 EXPOSE 8087
 
