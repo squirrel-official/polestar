@@ -75,24 +75,11 @@ WORKDIR /opt/libcamera
 RUN meson build
 RUN ninja -C build install -j4
 
-
-#RUN mkdir -p /opt/libcamera \
-#    && cd /opt/libcamera
-
-#RUN git clone https://git.libcamera.org/libcamera/libcamera.git
-#
-#RUN pip3 install meson
-#RUN pip3 install ply
-#RUN apt install ninja-build
-#WORKDIR /usr/local/libcamera
-#RUN meson build
-#RUN ninja -C build install -j4
-
 WORKDIR /usr/local/
-RUN git clone https://github.com/squirrel-official/polestar-konnect.git && \
-    git clone https://github.com/squirrel-official/polestar.git
+RUN git clone https://github.com/squirrel-official/polestar.git
+#RUN git clone https://github.com/squirrel-official/polestar-konnect.git
 
-RUN cd polestar-konnect && gradle clean build
+#RUN cd polestar-konnect && gradle clean build
 
 # Cleanup unnecessary packages and caches
 RUN apt-get clean && \
