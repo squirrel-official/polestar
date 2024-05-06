@@ -1,4 +1,4 @@
-# Use Ubuntu 20.04 as base image
+# Use Ubuntu 20.04 as base image or 23.04
 # Use ARM-compatible base image for Raspberry Pi 4
 FROM arm64v8/ubuntu:20.04
 
@@ -65,23 +65,42 @@ ENV PATH=$PATH:/opt/gradle/gradle-${GRADLE_VERSION}/bin
 # Verify installation
 RUN gradle --version
 
+RUN pip3 install meson
+RUN pip3 install ply
+RUN apt install ninja-build
 
-# Set working directory
+RUN cd /opt \
+    && git clone https://github.com/raspberrypi/libcamera.git
+WORKDIR /opt/libcamera
+RUN meson build
+RUN ninja -C build install -j4
+
+
+#RUN mkdir -p /opt/libcamera \
+#    && cd /opt/libcamera
+
+#RUN git clone https://git.libcamera.org/libcamera/libcamera.git
+#
+#RUN pip3 install meson
+#RUN pip3 install ply
+#RUN apt install ninja-build
+#WORKDIR /usr/local/libcamera
+#RUN meson build
+#RUN ninja -C build install -j4
+
 WORKDIR /usr/local/
-
 RUN git clone https://github.com/squirrel-official/polestar-konnect.git && \
     git clone https://github.com/squirrel-official/polestar.git
 
-
-RUN cd polestar-konnect && \
-    gradle clean build
+RUN cd polestar-konnect && gradle clean build
 
 # Cleanup unnecessary packages and caches
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+RUN  python3 "/usr/local/polestar/service/motionDetection.py"
+
 EXPOSE 8087
 
 # Set entrypoint if needed
 ENTRYPOINT ["python3", "/usr/local/polestar/service/motionDetection.py"]
-
