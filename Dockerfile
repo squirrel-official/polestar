@@ -75,6 +75,7 @@ WORKDIR /opt/libcamera
 RUN meson build
 RUN ninja -C build install -j4
 
+RUN gradle --version
 WORKDIR /usr/local/
 RUN git clone https://github.com/squirrel-official/polestar.git
 #RUN git clone https://github.com/squirrel-official/polestar-konnect.git
@@ -83,8 +84,9 @@ RUN git clone https://github.com/squirrel-official/polestar.git
 
 # Cleanup unnecessary packages and caches
 RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* \
 
+RUN pip3 install picamera2
 RUN  python3 "/usr/local/polestar/service/motionDetection.py"
 
 EXPOSE 8087
