@@ -1,13 +1,12 @@
-# Use Ubuntu 20.04 as base image or 23.04
-# Use ARM-compatible base image for Raspberry Pi 4
-FROM dtcooper/raspberrypi-os:python3.10-bookworm
+# Stage 1: Use ARM-compatible base image for Raspberry Pi 4
+FROM dtcooper/raspberrypi-os:python3.10-bookworm AS base
 
+# Set timezone
+ARG CONTAINER_TIMEZONE=UTC
 RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
-ARG DEBIAN_FRONTEND=noninteractive
-
 
 # Update package lists and install necessary packages
-
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y \
     python3-pip \
@@ -16,9 +15,7 @@ RUN apt-get update && \
     libssl-dev \
     libgtk2.0-dev \
     pkg-config \
-    libhdf5-dev
-
-RUN apt-get install -y \
+    libhdf5-dev \
     ffmpeg \
     libsm6 \
     libxext6 \
@@ -26,66 +23,42 @@ RUN apt-get install -y \
     python3-opencv \
     python3-h5py \
     libportaudio2 \
-    libatlas-base-dev
-
-RUN apt-get install -y \
+    libatlas-base-dev \
     openjdk-17-jdk \
     curl \
-    git
+    git \
+    unzip \
+    zip \
+    wget \
+    python3-picamera2 \
+    python3-libcamera \
+    libcamera-apps
+
 # Install additional Python packages
 RUN pip3 install --upgrade pip
-RUN pip3 install Pillow
-RUN pip install dlib -vvv
-RUN pip3 install face_recognition numpy
-RUN pip3 install numpy
-RUN pip3 install --upgrade pip setuptools wheel
-RUN pip3 install opencv-contrib-python -vvv
-RUN pip3 install tflite-support  -vvv
-RUN pip3 install deepface -vvv
-RUN pip3 install tf-keras -vvv
-RUN pip3 install facenet-pytorch ultralytics -vvv
-RUN pip3 install tensorflow-aarch64  -vvv
+RUN pip3 install Pillow dlib numpy opencv-contrib-python tflite-support deepface tf-keras ultralytics facenet-pytorch tensorflow-aarch64
 
-
-# Install TFLite runtime
-#RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | tee /etc/apt/sources.list.d/coral-edgetpu.list && \
-#    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-#RUN  apt-get update && \
-#    apt-get install -y python3-tflite-runtime
-
-RUN apt-get install -y unzip zip wget
-RUN apt-get install -y python3-picamera2
-RUN apt-get install -y python3-libcamera
-RUN apt-get install -y libcamera-apps
-
+# Install Gradle
 ENV GRADLE_VERSION=8.7
 RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
     && mkdir /opt/gradle \
     && unzip -d /opt/gradle gradle-${GRADLE_VERSION}-bin.zip \
     && rm gradle-${GRADLE_VERSION}-bin.zip
-# Set Gradle path
 ENV PATH=$PATH:/opt/gradle/gradle-${GRADLE_VERSION}/bin
 
-
-#RUN pip3 install meson
-#RUN pip3 install ply
-#RUN apt install ninja-build
-
-#RUN cd /opt \
-#    && git clone https://github.com/raspberrypi/libcamera.git
-#WORKDIR /opt/libcamera
-#RUN meson build
-##RUN ninja -C build install -j4 --prefix=/opt/libcamera
-#ENV export INSTALL_PREFIX=/opt/libcamera
-#RUN ninja -C build install -j4
-#RUN echo "anil"
+# Stage 2: Clone repositories and build
+FROM base AS builder
 
 WORKDIR /usr/local/
-RUN git clone https://github.com/squirrel-official/polestar.git
-RUN git clone https://github.com/squirrel-official/polestar-konnect.gi
-RUN cd polestar-konnect && gradle clean build
+RUN git clone https://github.com/squirrel-official/polestar.git && \
+    git clone https://github.com/squirrel-official/polestar-konnect.git && \
+    cd polestar-konnect && \
+    gradle clean build
 
-#RUN  python3 "/usr/local/polestar/service/motionDetection.py"
+# Stage 3: Final image
+FROM base AS final
+
+COPY --from=builder /usr/local/polestar /usr/local/polestar
 
 # Cleanup unnecessary packages and caches
 RUN apt-get clean && \
@@ -93,5 +66,5 @@ RUN apt-get clean && \
 
 EXPOSE 8087
 
-# Set entrypoint if needed
+# Set entrypoint
 ENTRYPOINT ["python3", "/usr/local/polestar/service/motionDetection.py"]
