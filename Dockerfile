@@ -54,9 +54,9 @@ RUN pip3 install tensorflow-aarch64  -vvv
 #    apt-get install -y python3-tflite-runtime
 
 RUN apt-get install -y unzip zip wget
-RUN apt install -y python3-picamera2
-RUN apt install -y python3-libcamera
-RUN apt install -y libcamera-apps
+RUN apt-get install -y python3-picamera2
+RUN apt-get install -y python3-libcamera
+RUN apt-get install -y libcamera-apps
 
 ENV GRADLE_VERSION=8.7
 RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
