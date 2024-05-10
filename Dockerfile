@@ -1,5 +1,7 @@
 # Stage 1: Use ARM-compatible base image for Raspberry Pi 4
-FROM dtcooper/raspberrypi-os:python3.10-bookworm AS base
+FROM --platform=linux/arm64/v8 dtcooper/raspberrypi-os:python3.10-bookworm AS base
+
+#FROM dtcooper/raspberrypi-os:python3.10-bookworm AS base
 
 # Set timezone
 ARG CONTAINER_TIMEZONE=UTC
@@ -67,4 +69,4 @@ RUN apt-get clean && \
 EXPOSE 8087
 
 # Set entrypoint
-ENTRYPOINT ["python3", "/usr/local/polestar/service/motionDetection.py"]
+#ENTRYPOINT ["python3", "/usr/local/polestar/service/motionDetection.py"]
