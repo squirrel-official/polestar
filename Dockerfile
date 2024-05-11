@@ -1,6 +1,5 @@
 # Stage 1: Use ARM-compatible base image for Raspberry Pi 4
-FROM --platform=linux/arm64/v8 dtcooper/raspberrypi-os:python3.10-bookworm AS base
-
+FROM --platform=linux/arm/v8 dtcooper/raspberrypi-os:python3.10-bookworm AS base
 #FROM dtcooper/raspberrypi-os:python3.10-bookworm AS base
 
 # Set timezone
@@ -38,7 +37,7 @@ RUN apt-get update && \
 
 # Install additional Python packages
 RUN pip3 install --upgrade pip
-RUN pip3 install Pillow dlib numpy opencv-contrib-python tflite-support deepface tf-keras ultralytics facenet-pytorch tensorflow-aarch64
+RUN pip3 install dlib Pillow numpy opencv-contrib-python tflite-support deepface tf-keras ultralytics facenet-pytorch tensorflow-aarch64
 
 # Install Gradle
 ENV GRADLE_VERSION=8.7
