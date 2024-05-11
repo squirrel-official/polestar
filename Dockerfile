@@ -37,8 +37,10 @@ RUN apt-get update && \
 
 # Install additional Python packages
 RUN pip3 install --upgrade pip
-RUN pip3 install dlib Pillow numpy opencv-contrib-python -vvv
-RUN pip3 install ultralytics facenet-pytorch tensorflow-aarch64 deepface ---v
+RUN pip3 install dlib -vvv
+RUN pip3 install Pillow numpy opencv-contrib-python -vvv
+RUN apt-get install -y gfortran libopenblas-dev
+RUN pip3 install ultralytics facenet-pytorch tensorflow-aarch64 deepface -vvv
 
 
 
