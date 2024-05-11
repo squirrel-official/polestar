@@ -37,7 +37,10 @@ RUN apt-get update && \
 
 # Install additional Python packages
 RUN pip3 install --upgrade pip
-RUN pip3 install dlib Pillow numpy opencv-contrib-python tflite-support deepface tf-keras ultralytics facenet-pytorch tensorflow-aarch64
+RUN pip3 install dlib Pillow numpy opencv-contrib-python -vvv
+RUN pip3 install ultralytics facenet-pytorch tensorflow-aarch64 deepface ---v
+
+
 
 # Install Gradle
 ENV GRADLE_VERSION=8.7
