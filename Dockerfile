@@ -8,41 +8,36 @@ RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONT
 # Update package lists and install necessary packages
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-    apt-get upgrade\
+    apt-get upgrade -y && \
     apt-get install -y \
-    python3-pip \
-    libjpeg-dev \
-    zlib1g-dev \
-    libssl-dev \
-    libgtk2.0-dev \
-    pkg-config \
-    libhdf5-dev \
-    ffmpeg \
-    libsm6 \
-    libxext6 \
-    cmake \
-    python3-opencv \
-    python3-h5py \
-    libportaudio2 \
-    libatlas-base-dev \
-    openjdk-17-jdk \
-    curl \
-    git \
-    unzip \
-    zip \
-    wget \
-    python3-picamera2 \
-    python3-libcamera \
-    libcamera-apps \
-    gfortran \
-    libopenblas-dev
-
-# Install additional Python packages
-RUN pip3 install --upgrade pip
-RUN pip3 install dlib -vvv
-RUN pip3 install Pillow numpy opencv-contrib-python -vvv
-RUN pip3 install ultralytics facenet-pytorch tensorflow-aarch64 deepface -vvv
-
+        python3-pip \
+        libjpeg-dev \
+        zlib1g-dev \
+        libssl-dev \
+        libgtk2.0-dev \
+        pkg-config \
+        libhdf5-dev \
+        ffmpeg \
+        libsm6 \
+        libxext6 \
+        cmake \
+        python3-opencv \
+        python3-h5py \
+        libportaudio2 \
+        libatlas-base-dev \
+        openjdk-17-jdk \
+        curl \
+        git \
+        unzip \
+        zip \
+        wget \
+        python3-picamera2 \
+        python3-libcamera \
+        libcamera-apps \
+        gfortran \
+        libopenblas-dev && \
+    pip3 install --upgrade pip && \
+    pip3 install dlib Pillow numpy opencv-contrib-python ultralytics facenet-pytorch tensorflow-aarch64 deepface -vvv
 
 # Install Gradle
 ENV GRADLE_VERSION=8.7
