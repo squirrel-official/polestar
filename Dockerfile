@@ -36,8 +36,12 @@ RUN apt-get update && \
         libcamera-apps \
         gfortran \
         libopenblas-dev && \
-    pip3 install --upgrade pip && \
-    pip3 install dlib Pillow numpy opencv-contrib-python ultralytics facenet-pytorch tensorflow-aarch64 deepface -vvv
+    pip3 install --upgrade pip
+
+# Install Python packages individually for better caching
+RUN pip3 install dlib -vvv
+RUN pip3 install Pillow numpy opencv-contrib-python -vvv
+RUN pip3 install ultralytics facenet-pytorch tensorflow-aarch64 deepface -vvv
 
 # Install Gradle
 ENV GRADLE_VERSION=8.7
