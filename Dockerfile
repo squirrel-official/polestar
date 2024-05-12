@@ -1,5 +1,5 @@
 # Stage 1: Use ARM-compatible base image for Raspberry Pi 4
-FROM --platform=linux/arm/v8 dtcooper/raspberrypi-os:python3.10-bookworm AS base
+FROM --platform=linux/arm/v8 dtcooper/raspberrypi-os:python3.12-bookworm AS base
 
 # Set timezone
 ARG CONTAINER_TIMEZONE=UTC
