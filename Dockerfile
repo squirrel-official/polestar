@@ -1,6 +1,5 @@
 # Stage 1: Use ARM-compatible base image for Raspberry Pi 4
 FROM --platform=linux/arm/v8 dtcooper/raspberrypi-os:python3.10-bookworm AS base
-#FROM dtcooper/raspberrypi-os:python3.10-bookworm AS base
 
 # Set timezone
 ARG CONTAINER_TIMEZONE=UTC
@@ -9,6 +8,7 @@ RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONT
 # Update package lists and install necessary packages
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
+    apt-get upgrade\
     apt-get install -y \
     python3-pip \
     libjpeg-dev \
@@ -33,15 +33,15 @@ RUN apt-get update && \
     wget \
     python3-picamera2 \
     python3-libcamera \
-    libcamera-apps
+    libcamera-apps \
+    gfortran \
+    libopenblas-dev
 
 # Install additional Python packages
 RUN pip3 install --upgrade pip
 RUN pip3 install dlib -vvv
 RUN pip3 install Pillow numpy opencv-contrib-python -vvv
-RUN apt-get install -y gfortran libopenblas-dev
 RUN pip3 install ultralytics facenet-pytorch tensorflow-aarch64 deepface -vvv
-
 
 
 # Install Gradle
